@@ -6,6 +6,7 @@ import swal from "sweetalert2";
 import { months } from "../variables/general";
 import { colors } from "../variables/general";
 
+import { useLocation } from "react-router-dom";
 interface IChartData {
   camp: string;
   country: string;
@@ -17,9 +18,10 @@ interface IChartData {
 }
 
 const Dashboard = () => {
-  const [country, setCountry] = useState("");
-  const [camp, setCamp] = useState("");
-  const [school, setSchool] = useState("");
+  let location = useLocation();
+  const [country, setCountry] = useState();
+  const [camp, setCamp] = useState();
+  const [school, setSchool] = useState();
   const [countryOptions, setCountryOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -37,6 +39,12 @@ const Dashboard = () => {
 
   const [filteredInfo, setFilteredInfo] = useState<IChartData[]>([]);
 
+  console.log(location.search);
+  let count = 0;
+  if (location.search !== null && count === 0) {
+    console.log(location.search?.split("?")[1]?.split("=")[1]);
+    count++;
+  }
   const removeStringDuplicateUsingFilter = (arr: Array<string>) => {
     let unique_array = arr.filter(
       (elem: string, index: number, self: Array<string>) => {
@@ -915,7 +923,14 @@ const Dashboard = () => {
                         onChange={(e) => handleChange(filtereditem.id)}
                       />
                     </span>
-                    <a href={`http://localhost/school/${filtereditem.id}`}>
+                    <a
+                      style={{ color: `${colors[index]}` }}
+                      href={`http://localhost:3000/school/${
+                        filtereditem.id
+                      }?country=${country}?camp=${camp}?school=${school}?filtedarr=${JSON.stringify(
+                        filteredInfo
+                      )}`}
+                    >
                       <h1>{filtereditem.lessons}</h1> in {filtereditem.school}
                     </a>
                   </div>
