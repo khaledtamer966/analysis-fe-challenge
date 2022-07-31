@@ -1,10 +1,9 @@
 import React, { useRef } from "react";
 import { Chart, registerables } from "chart.js";
-Chart.register(...registerables);
 import { Line } from "react-chartjs-2";
 import classes from "./LineChart.module.css";
+Chart.register(...registerables);
 function LineChart(props: any) {
-  console.log(props.ChosenIndex, "Index");
   const data = {
     labels: props.labels,
     datasets: props.datasets,
@@ -17,11 +16,6 @@ function LineChart(props: any) {
     plugins: {
       legend: {
         display: false,
-        labels: {
-          filter: function (legendItem: any, data: any) {
-            return legendItem.index != 1;
-          },
-        },
       },
     },
     scales: {
@@ -34,16 +28,7 @@ function LineChart(props: any) {
       },
     },
   };
-  const chart = "myChart";
-  console.log(chart, "visible");
 
-  return (
-    <Line
-      id="myChart"
-      className={classes.chart}
-      data={data}
-      options={options}
-    />
-  );
+  return <Line className={classes.chart} data={data} options={options} />;
 }
 export default LineChart;
