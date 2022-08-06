@@ -43,7 +43,13 @@ const Dashboard = () => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
   }, []);
-  console.log(ploaction.search.split("?")[1].split("=")[1]);
+  console.log(
+    `http://localhost:3000?countryvalue=${
+      ploaction.search.split("?")[1].split("=")[1]
+    }&campvalue=${ploaction.search.split("&")[1].split("=")[1]}&schoolvalue=${
+      ploaction.search.split("&")[2].split("=")[1]
+    }&filteredarr=${ploaction.search.split("&")[3].split("=")[1]}`
+  );
   return (
     <>
       <div style={{ margin: "10%" }}>
@@ -51,11 +57,13 @@ const Dashboard = () => {
           className="btn btn-danger my-2"
           onClick={() =>
             window.location.replace(
-              `http://localhost:3000?country=${
-                ploaction.search.split("?")[1].split("=")[1]
-              }?camp=${ploaction.search.split("?")[2].split("=")[1]}?school=${
-                ploaction.search.split("?")[3].split("=")[1]
-              }?filteredarr=${ploaction.search.split("?")[4].split("=")[1]}`
+              `http://localhost:3000?countryvalue=${
+                ploaction.search.split("?")[1].split("=")[1].split("&")[0]
+              }&campvalue=${
+                ploaction.search.split("&")[1].split("=")[1]
+              }&schoolvalue=${
+                ploaction.search.split("&")[2].split("=")[1]
+              }&filteredarr=${ploaction.search.split("&")[3].split("=")[1]}`
             )
           }
         >

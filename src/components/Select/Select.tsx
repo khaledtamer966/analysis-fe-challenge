@@ -13,6 +13,7 @@ function Select(props: any) {
         onChange={props.onChange}
         styles={props.styles}
         menuPortalTarget={props.menuPortalTarget}
+        defaultValue={props.defaultValue}
       />
     </>
   );
