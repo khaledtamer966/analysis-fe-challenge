@@ -17,8 +17,6 @@ interface IChartData {
 
 function CampSelect(props: any) {
   let location = useLocation();
-  console.log("filteredscrollbar", props.filteredInfoscrollbar);
-  console.log("filteredinfo", props.filteredInfo);
 
   const handleCampSelect = (
     selectedOption: {
@@ -246,7 +244,6 @@ function CampSelect(props: any) {
           )
         );
       } else {
-        console.log("i am here");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             props.info?.map((option: IChartData) => {

@@ -53,6 +53,8 @@ const Dashboard = () => {
     { value: string; label: string }[]
   >([]);
   const [info, setInfo] = useState<IChartData[]>([]);
+  const [checked, setChecked] = useState("true");
+
   const [ChosenIndex, setChosenIndex] = useState(-1);
   const [filteredInfoscrollbar, setFilteredInfoScrollbar] = useState<
     IChartData[]
@@ -176,21 +178,18 @@ const Dashboard = () => {
       });
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    console.log("checked", e.target.checked);
-    let index = filteredInfo?.findIndex((elem: IChartData) => elem.id === id);
-
-    if (filteredInfo[index].checked) {
-      filteredInfo.splice(index, 1);
-      setFilteredInfo(filteredInfo);
-    } else {
-      let indexscroll = filteredInfoscrollbar?.findIndex(
-        (elem: IChartData) => elem.id === id
-      );
-      filteredInfo.push(filteredInfoscrollbar[indexscroll]);
-      setFilteredInfo(filteredInfo);
-    }
+  const handleChange = (id: string, status: string) => {
+    let indexinfo = filteredInfo?.findIndex(
+      (elem: IChartData) => elem.id === id
+    );
+    let scrollindex = filteredInfoscrollbar?.findIndex(
+      (elem: IChartData) => elem.id === id
+    );
+    filteredInfoscrollbar[scrollindex].checked = status;
+    console.log("test", filteredInfoscrollbar);
+    setFilteredInfoScrollbar(filteredInfoscrollbar);
   };
+  console.log("filtededddd", filteredInfoscrollbar);
   return (
     <>
       <div
@@ -335,24 +334,46 @@ const Dashboard = () => {
             {filteredInfoscrollbar?.map(
               (filtereditem: IChartData, index: number) => {
                 return (
-                  <div style={{ color: `${colors[index]}` }}>
-                    <span>
-                      <input
-                        style={{ borderRadius: "100%" }}
+                  <div
+                    style={{
+                      color: `${colors[index]}`,
+                      display: "flex",
+                    }}
+                  >
+                    {filtereditem?.checked === "true" ? (
+                      <span
+                        style={{
+                          margin: "15px",
+                          width: "10px",
+                          height: "10px",
+                          backgroundColor: `#fff`,
+                          border: "1px solid #000",
+                          borderRadius: "50%",
+                          cursor: "pointer",
+                        }}
                         id={`${filtereditem.id}`}
-                        name={`${filtereditem.id}`}
-                        type="checkbox"
-                        checked={
-                          document
-                            .getElementById(filtereditem.id)
-                            ?.getAttribute("checked")
-                            ? true
-                            : false
-                        }
-                        autoComplete="off"
-                        onChange={(e) => handleChange(e, filtereditem.id)}
-                      />
-                    </span>
+                        onClick={() => {
+                          handleChange(filtereditem.id, "true");
+                        }}
+                      ></span>
+                    ) : (
+                      <span
+                        style={{
+                          margin: "15px",
+                          width: "10px",
+                          height: "10px",
+                          backgroundColor: `${colors[index]}`,
+                          border: "1px solid #000",
+                          borderRadius: "50%",
+                          cursor: "pointer",
+                        }}
+                        id={`${filtereditem.id}`}
+                        onClick={() => {
+                          handleChange(filtereditem.id, "false");
+                        }}
+                      ></span>
+                    )}
+
                     <a
                       style={{ color: `${colors[index]}` }}
                       href={`http://localhost:3000/school/${

@@ -17,8 +17,6 @@ interface IChartData {
 
 function SchoolSelect(props: any) {
   let location = useLocation();
-  console.log("filteredscrollbar", props.filteredInfoscrollbar);
-  console.log("filteredinfo", props.filteredInfo);
 
   const handleSchoolSelect = (selectedOption: {
     value: string;

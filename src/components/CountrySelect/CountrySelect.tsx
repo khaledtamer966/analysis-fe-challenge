@@ -17,8 +17,6 @@ interface IChartData {
 
 function CountrySelect(props: any) {
   let location = useLocation();
-  console.log("filteredscrollbar", props.filteredInfoscrollbar);
-  console.log("filteredinfo", props.filteredInfo);
 
   const handleCountrySelect = (selectedOption: {
     value: string;
@@ -156,7 +154,6 @@ function CountrySelect(props: any) {
         );
       }
     } else {
-      console.log("selectedOption");
       props.setCountry("");
       if (props.camp !== undefined && props.school !== undefined) {
         props.setCampOptions(
