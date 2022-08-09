@@ -102,7 +102,7 @@ function SchoolSelect(props: any) {
         );
       }
     } else {
-      props.setSchool("");
+      props.setSchool(undefined);
       if (props.camp !== undefined && props.country !== undefined) {
         props.setFilteredInfo(
           removeObjDuplicateUsingFilterbycountryandschool(

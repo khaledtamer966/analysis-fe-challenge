@@ -179,17 +179,24 @@ const Dashboard = () => {
   }, []);
 
   const handleChange = (id: string, status: string) => {
+    let tempinfo = [...filteredInfo];
+    let tempscrollbar = [...filteredInfoscrollbar];
     let indexinfo = filteredInfo?.findIndex(
       (elem: IChartData) => elem.id === id
     );
-    let scrollindex = filteredInfoscrollbar?.findIndex(
+    let scrollindex = tempscrollbar?.findIndex(
       (elem: IChartData) => elem.id === id
     );
-    filteredInfoscrollbar[scrollindex].checked = status;
-    console.log("test", filteredInfoscrollbar);
-    setFilteredInfoScrollbar(filteredInfoscrollbar);
+    status === "true"
+      ? tempinfo.splice(indexinfo, 1)
+      : tempinfo.push(tempscrollbar[scrollindex]);
+
+    setFilteredInfo(tempinfo);
+    tempscrollbar[scrollindex].checked = status;
+    setFilteredInfoScrollbar(tempscrollbar);
   };
-  console.log("filtededddd", filteredInfoscrollbar);
+  console.log("schooloptions", schoolOptions);
+  console.log("filtered Info", filteredInfo);
   return (
     <>
       <div
@@ -353,7 +360,7 @@ const Dashboard = () => {
                         }}
                         id={`${filtereditem.id}`}
                         onClick={() => {
-                          handleChange(filtereditem.id, "true");
+                          handleChange(filtereditem.id, "false");
                         }}
                       ></span>
                     ) : (
@@ -369,7 +376,7 @@ const Dashboard = () => {
                         }}
                         id={`${filtereditem.id}`}
                         onClick={() => {
-                          handleChange(filtereditem.id, "false");
+                          handleChange(filtereditem.id, "true");
                         }}
                       ></span>
                     )}

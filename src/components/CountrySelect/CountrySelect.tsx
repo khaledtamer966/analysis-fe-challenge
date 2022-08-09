@@ -154,7 +154,7 @@ function CountrySelect(props: any) {
         );
       }
     } else {
-      props.setCountry("");
+      props.setCountry(undefined);
       if (props.camp !== undefined && props.school !== undefined) {
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
@@ -238,6 +238,14 @@ function CountrySelect(props: any) {
           )
         );
       } else {
+        console.log(
+          "i am here",
+          removeDuplicateOptionsUsingFilter(
+            props.info?.map((option: IChartData) => {
+              return { value: option.camp, label: option.camp };
+            })
+          )
+        );
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
             props.info?.map((option: IChartData) => {

@@ -28,6 +28,7 @@ function CampSelect(props: any) {
     if (selectedOption) {
       props.setCamp(selectedOption.label);
       if (props.country !== undefined && props.school !== undefined) {
+        console.log("coutry and school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -63,6 +64,7 @@ function CampSelect(props: any) {
           )
         );
       } else if (props.country !== undefined) {
+        console.log("coutry");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -95,6 +97,7 @@ function CampSelect(props: any) {
           )
         );
       } else if (props.school !== undefined) {
+        console.log(" school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -127,6 +130,7 @@ function CampSelect(props: any) {
           )
         );
       } else {
+        console.log("none");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             props.info
@@ -157,8 +161,9 @@ function CampSelect(props: any) {
         );
       }
     } else {
-      props.setCamp("");
+      props.setCamp(undefined);
       if (props.country !== undefined && props.school !== undefined) {
+        console.log("coutry and school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -191,6 +196,7 @@ function CampSelect(props: any) {
           )
         );
       } else if (props.country !== undefined) {
+        console.log("coutry");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -220,6 +226,7 @@ function CampSelect(props: any) {
           )
         );
       } else if (props.school !== undefined) {
+        console.log(" school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(props.info).map(
@@ -244,6 +251,7 @@ function CampSelect(props: any) {
           )
         );
       } else {
+        console.log("none");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
             props.info?.map((option: IChartData) => {
