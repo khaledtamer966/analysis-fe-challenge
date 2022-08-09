@@ -13,6 +13,7 @@ import {
   removeObjDuplicateUsingFilter,
   calculateSum,
   removeObjDuplicateUsingFilterbycountryandschool,
+  getValuesCorrectlyFromURLforChart,
 } from "../variables/general";
 
 import { useLocation } from "react-router-dom";
@@ -71,72 +72,53 @@ const Dashboard = () => {
       .then((res) => {
         //save full array
         setInfo(removeObjDuplicateUsingFilter(res.data));
+        console.log("search", location.search);
+        let countryvalue =
+          location.search === ""
+            ? ""
+            : location.search?.split("?")[1]?.split("=")[1]?.split("&")[0] !==
+              "undefined"
+            ? location.search?.split("?")[1]?.split("=")[1]?.split("&")[0]
+            : "";
+        let campvalue =
+          location.search === ""
+            ? ""
+            : location.search?.split("&")[1]?.split("=")[1] !== "undefined"
+            ? location.search?.split("&")[1]?.split("=")[1]
+            : "";
+        let schoolvalue =
+          location.search === ""
+            ? ""
+            : location.search?.split("&")[2]?.split("=")[1] !== "undefined"
+            ? location.search?.split("&")[2]?.split("=")[1]
+            : "";
+        setCountry(countryvalue);
+        setCamp(campvalue);
+        setSchool(schoolvalue);
 
-        location.search === ""
-          ? setFilteredInfo(
-              removeObjDuplicateUsingFilterbycountryandschool(res.data)
-            )
-          : location.search?.split("?")[1]?.split("=")[1]?.split("&")[0] &&
-            location.search?.split("&")[1]?.split("=")[1] &&
-            location.search?.split("&")[2]?.split("=")[1]
-          ? setFilteredInfo(
-              removeObjDuplicateUsingFilterbycountryandschool(
-                res.data?.filter(
-                  (filteredItem: IChartData) =>
-                    filteredItem.country ===
-                      location.search
-                        ?.split("?")[1]
-                        ?.split("=")[1]
-                        ?.split("&")[0] &&
-                    filteredItem.camp ===
-                      location.search?.split("&")[1]?.split("=")[1] &&
-                    filteredItem.school ===
-                      location.search
-                        ?.split("&")[2]
-                        ?.split("=")[1]
-                        ?.replaceAll("_", " ")
-                )
-              )
-            )
-          : location.search?.split("&")[1]?.split("=")[1] &&
-            location.search?.split("&")[2]?.split("=")[1]
-          ? setFilteredInfo(
-              removeObjDuplicateUsingFilterbycountryandschool(
-                res.data?.filter(
-                  (filteredItem: IChartData) =>
-                    filteredItem.camp ===
-                      location.search?.split("&")[1]?.split("=")[1] &&
-                    filteredItem.school ===
-                      location.search
-                        ?.split("&")[2]
-                        ?.split("=")[1]
-                        ?.replaceAll("_", " ")
-                )
-              )
-            )
-          : location.search === ""
-          ? setFilteredInfoScrollbar(
-              removeObjDuplicateUsingFilterbycountryandschool(res.data)
-            )
-          : setFilteredInfoScrollbar(
-              removeObjDuplicateUsingFilterbycountryandschool(
-                res.data?.filter(
-                  (filteredItem: IChartData) =>
-                    filteredItem.country ===
-                      location.search
-                        ?.split("?")[1]
-                        ?.split("=")[1]
-                        ?.split("&")[0] &&
-                    filteredItem.camp ===
-                      location.search?.split("&")[1]?.split("=")[1] &&
-                    filteredItem.school ===
-                      location.search
-                        ?.split("&")[2]
-                        ?.split("=")[1]
-                        ?.replaceAll("_", " ")
-                )
-              )
-            );
+        setFilteredInfo(
+          removeObjDuplicateUsingFilterbycountryandschool(
+            getValuesCorrectlyFromURLforChart(
+              countryvalue === "" ? "" : countryvalue,
+              campvalue === "" ? "" : campvalue,
+              schoolvalue === "" ? "" : schoolvalue.replaceAll("_", " "),
+              res.data,
+              location.search
+            ) ?? []
+          )
+        );
+        setFilteredInfoScrollbar(
+          removeObjDuplicateUsingFilterbycountryandschool(
+            getValuesCorrectlyFromURLforChart(
+              countryvalue === "" ? "" : countryvalue,
+              campvalue === "" ? "" : campvalue,
+              schoolvalue === "" ? "" : schoolvalue.replaceAll("_", " "),
+              res.data,
+              location.search
+            ) ?? []
+          )
+        );
+
         //remove Duplicates in countries,camps,and schools
         let filteredCountryArr = removeStringDuplicateUsingFilter(
           res.data.map((record: IChartData) => record.country)
@@ -177,7 +159,7 @@ const Dashboard = () => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
   }, []);
-
+  console.log(country, school, camp);
   const handleChange = (id: string, status: string) => {
     let tempinfo = [...filteredInfo];
     let tempscrollbar = [...filteredInfoscrollbar];
@@ -199,26 +181,29 @@ const Dashboard = () => {
   console.log("filtered Info", filteredInfo);
   return (
     <>
-      <div
-        className="w-95 m-2"
-        style={{ flex: "display", justifyContent: "space-evenly" }}
-      >
+      <div className="col-md-12">
         <div
-          className="row w-70"
+          className="col-md-12"
           style={{
             color: "white",
             backgroundColor: "purple",
           }}
         >
-          <h1 style={{ fontFamily: "Segoe UI", color: "white" }}>
+          <h1
+            style={{
+              fontSize: "4vw",
+              fontFamily: "Segoe UI",
+              color: "white",
+              marginLeft: "2%",
+            }}
+          >
             Analysis Chart
           </h1>
-          <h3>Number of lessons</h3>
-          <div
-            className="w-70"
-            style={{ display: "flex", justifyContent: "space-evenly" }}
-          >
-            <div className="w-25">
+          <h3 style={{ fontSize: "4vw", marginLeft: "2%" }}>
+            Number of lessons
+          </h3>
+          <div className="row" style={{ marginLeft: "2%", marginRight: "2%" }}>
+            <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select Country</label>
               {countryOptions.length !== 0 ? (
                 <CountrySelect
@@ -243,7 +228,7 @@ const Dashboard = () => {
                 />
               ) : null}
             </div>
-            <div className="w-25">
+            <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select Camp</label>
               {campOptions.length !== 0 ? (
                 <CampSelect
@@ -268,7 +253,7 @@ const Dashboard = () => {
                 />
               ) : null}
             </div>
-            <div className="w-25">
+            <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select School</label>
               {schoolOptions.length !== 0 ? (
                 <SchoolSelect
@@ -295,9 +280,10 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="row w-100 ">
+        <div className="row">
           <span
-            style={{ width: "75%", marginLeft: "5%", borderRight: "1px solid" }}
+            className="col-md-9"
+            style={{ marginLeft: "5%", borderRight: "1px solid" }}
           >
             <LineChart
               labels={months?.map((month: string) => month)}
@@ -319,9 +305,10 @@ const Dashboard = () => {
             />
           </span>
           <span
+            className="col-md-2"
             style={{
               backgroundColor: "white",
-              width: "17%",
+              marginLeft: "2%",
               maxHeight: "500px",
               overflowY: "scroll",
             }}

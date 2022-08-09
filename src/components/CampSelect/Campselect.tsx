@@ -27,7 +27,7 @@ function CampSelect(props: any) {
   ) => {
     if (selectedOption) {
       props.setCamp(selectedOption.label);
-      if (props.country !== undefined && props.school !== undefined) {
+      if (props.country !== "" && props.school !== "") {
         console.log("coutry and school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
@@ -63,7 +63,7 @@ function CampSelect(props: any) {
             )
           )
         );
-      } else if (props.country !== undefined) {
+      } else if (props.country !== "") {
         console.log("coutry");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
@@ -96,7 +96,7 @@ function CampSelect(props: any) {
             )
           )
         );
-      } else if (props.school !== undefined) {
+      } else if (props.school !== "") {
         console.log(" school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
@@ -161,8 +161,8 @@ function CampSelect(props: any) {
         );
       }
     } else {
-      props.setCamp(undefined);
-      if (props.country !== undefined && props.school !== undefined) {
+      props.setCamp("");
+      if (props.country !== "" && props.school !== "") {
         console.log("coutry and school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
@@ -195,7 +195,7 @@ function CampSelect(props: any) {
             )
           )
         );
-      } else if (props.country !== undefined) {
+      } else if (props.country !== "") {
         console.log("coutry");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(
@@ -225,7 +225,7 @@ function CampSelect(props: any) {
             )
           )
         );
-      } else if (props.school !== undefined) {
+      } else if (props.school !== "") {
         console.log(" school");
         props.setSchoolOptions(
           removeDuplicateOptionsUsingFilter(

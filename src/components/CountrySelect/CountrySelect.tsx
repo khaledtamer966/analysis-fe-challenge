@@ -24,7 +24,7 @@ function CountrySelect(props: any) {
   }) => {
     if (selectedOption) {
       props.setCountry(selectedOption.label);
-      if (props.camp !== undefined && props.school !== undefined) {
+      if (props.camp !== "" && props.school !== "") {
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -59,7 +59,7 @@ function CountrySelect(props: any) {
             )
           )
         );
-      } else if (props.camp !== undefined) {
+      } else if (props.camp !== "") {
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -91,7 +91,7 @@ function CountrySelect(props: any) {
             )
           )
         );
-      } else if (props.school !== undefined) {
+      } else if (props.school !== "") {
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -154,8 +154,8 @@ function CountrySelect(props: any) {
         );
       }
     } else {
-      props.setCountry(undefined);
-      if (props.camp !== undefined && props.school !== undefined) {
+      props.setCountry("");
+      if (props.camp !== "" && props.school !== "") {
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(
@@ -187,7 +187,7 @@ function CountrySelect(props: any) {
             )
           )
         );
-      } else if (props.camp !== undefined) {
+      } else if (props.camp !== "") {
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(props.info).map(
@@ -211,7 +211,7 @@ function CountrySelect(props: any) {
             )
           )
         );
-      } else if (props.school !== undefined) {
+      } else if (props.school !== "") {
         props.setCampOptions(
           removeDuplicateOptionsUsingFilter(
             removeObjDuplicateUsingFilterbycountryandschool(

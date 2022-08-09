@@ -24,7 +24,7 @@ function SchoolSelect(props: any) {
   }) => {
     if (selectedOption) {
       props.setSchool(selectedOption.label);
-      if (props.camp !== undefined && props.country !== undefined) {
+      if (props.camp !== "" && props.country !== "") {
         props.setFilteredInfo(
           removeObjDuplicateUsingFilterbycountryandschool(
             props.info.filter(
@@ -45,7 +45,7 @@ function SchoolSelect(props: any) {
             )
           )
         );
-      } else if (props.camp !== undefined) {
+      } else if (props.camp !== "") {
         props.setFilteredInfo(
           removeObjDuplicateUsingFilterbycountryandschool(
             props.info.filter(
@@ -64,7 +64,7 @@ function SchoolSelect(props: any) {
             )
           )
         );
-      } else if (props.country !== undefined) {
+      } else if (props.country !== "") {
         props.setFilteredInfo(
           removeObjDuplicateUsingFilterbycountryandschool(
             props.info.filter(
@@ -102,8 +102,8 @@ function SchoolSelect(props: any) {
         );
       }
     } else {
-      props.setSchool(undefined);
-      if (props.camp !== undefined && props.country !== undefined) {
+      props.setSchool("");
+      if (props.camp !== "" && props.country !== "") {
         props.setFilteredInfo(
           removeObjDuplicateUsingFilterbycountryandschool(
             props.info.filter(
@@ -122,7 +122,7 @@ function SchoolSelect(props: any) {
             )
           )
         );
-      } else if (props.camp !== undefined) {
+      } else if (props.camp !== "") {
         props.setFilteredInfo(
           removeObjDuplicateUsingFilterbycountryandschool(
             props.info.filter(
@@ -137,7 +137,7 @@ function SchoolSelect(props: any) {
             )
           )
         );
-      } else if (props.country !== undefined) {
+      } else if (props.country !== "") {
         props.setFilteredInfo(
           removeObjDuplicateUsingFilterbycountryandschool(
             props.info.filter(
