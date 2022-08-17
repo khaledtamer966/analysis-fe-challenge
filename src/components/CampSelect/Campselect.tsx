@@ -89,17 +89,7 @@ function CampSelect(props: any) {
     }
     if (params.get("schoolvalue")) {
       console.log("camp school", params.get("schoolvalue"));
-      temparrOptions = removeDuplicateOptionsUsingFilter(
-        removeObjDuplicateUsingFilterByCountryAndSchool(
-          temparrinfo?.filter(
-            (filtereditem: IChartData) =>
-              filtereditem.school ===
-              params.get("schoolvalue")?.replaceAll("_", " ")
-          )
-        ).map((option: IChartData) => {
-          return { value: option.school, label: option.school };
-        })
-      );
+
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         temparrinfo?.filter(
           (filtereditem: IChartData) =>
@@ -116,6 +106,7 @@ function CampSelect(props: any) {
   return (
     <>
       <Select
+        id={props.id}
         onChange={handleCampSelect}
         menuPortalTarget={document.body}
         styles={{

@@ -126,7 +126,7 @@ const Dashboard = () => {
       .catch((e) => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
-  }, []);
+  });
   const handleChange = (id: string, status: string) => {
     let tempinfo = [...filteredInfo];
     let tempscrollbar = [...filteredInfoscrollbar];
@@ -170,68 +170,62 @@ const Dashboard = () => {
           <div className="row" style={{ marginLeft: "2%", marginRight: "2%" }}>
             <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select Country</label>
-              {countryOptions.length !== 0 ? (
-                <CountrySelect
-                  id="countryselect"
-                  countryOptions={countryOptions}
-                  info={info}
-                  setFilteredInfo={(filteredInfo: Array<IChartData>) =>
-                    setFilteredInfo(filteredInfo)
-                  }
-                  filteredInfoscrollbar={filteredInfoscrollbar}
-                  filteredInfo={filteredInfo}
-                  setFilteredInfoScrollbar={(
-                    filteredInfoscrollbar: Array<IChartData>
-                  ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
-                  setCampOptions={(
-                    campOptions: Array<{ value: string; label: string }>
-                  ) => setCampOptions(campOptions)}
-                  campOptions={campOptions}
-                />
-              ) : null}
+              <CountrySelect
+                id="countryselect"
+                countryOptions={countryOptions}
+                info={info}
+                setFilteredInfo={(filteredInfo: Array<IChartData>) =>
+                  setFilteredInfo(filteredInfo)
+                }
+                filteredInfoscrollbar={filteredInfoscrollbar}
+                filteredInfo={filteredInfo}
+                setFilteredInfoScrollbar={(
+                  filteredInfoscrollbar: Array<IChartData>
+                ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
+                setCampOptions={(
+                  campOptions: Array<{ value: string; label: string }>
+                ) => setCampOptions(campOptions)}
+                campOptions={campOptions}
+              />
             </div>
             <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select Camp</label>
-              {campOptions.length !== 0 ? (
-                <CampSelect
-                  id="campselect"
-                  info={info}
-                  setFilteredInfo={(filteredInfo: Array<IChartData>) =>
-                    setFilteredInfo(filteredInfo)
-                  }
-                  filteredInfoscrollbar={filteredInfoscrollbar}
-                  filteredInfo={filteredInfo}
-                  setFilteredInfoScrollbar={(
-                    filteredInfoscrollbar: Array<IChartData>
-                  ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
-                  setSchoolOptions={(
-                    SchoolOptions: Array<{ value: string; label: string }>
-                  ) => setSchoolOptions(SchoolOptions)}
-                  campOptions={campOptions}
-                />
-              ) : null}
+              <CampSelect
+                id="campselect"
+                info={info}
+                setFilteredInfo={(filteredInfo: Array<IChartData>) =>
+                  setFilteredInfo(filteredInfo)
+                }
+                filteredInfoscrollbar={filteredInfoscrollbar}
+                filteredInfo={filteredInfo}
+                setFilteredInfoScrollbar={(
+                  filteredInfoscrollbar: Array<IChartData>
+                ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
+                setSchoolOptions={(
+                  SchoolOptions: Array<{ value: string; label: string }>
+                ) => setSchoolOptions(SchoolOptions)}
+                campOptions={campOptions}
+              />
             </div>
             <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select School</label>
-              {schoolOptions.length !== 0 ? (
-                <SchoolSelect
-                  id="schoolselect"
-                  schoolOptions={schoolOptions}
-                  info={info}
-                  setFilteredInfo={(filteredInfo: Array<IChartData>) =>
-                    setFilteredInfo(filteredInfo)
-                  }
-                  filteredInfoscrollbar={filteredInfoscrollbar}
-                  filteredInfo={filteredInfo}
-                  setFilteredInfoScrollbar={(
-                    filteredInfoscrollbar: Array<IChartData>
-                  ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
-                  setSchoolOptions={(
-                    SchoolOptions: Array<{ value: string; label: string }>
-                  ) => setSchoolOptions(SchoolOptions)}
-                  campOptions={campOptions}
-                />
-              ) : null}
+              <SchoolSelect
+                id="schoolselect"
+                schoolOptions={schoolOptions}
+                info={info}
+                setFilteredInfo={(filteredInfo: Array<IChartData>) =>
+                  setFilteredInfo(filteredInfo)
+                }
+                filteredInfoscrollbar={filteredInfoscrollbar}
+                filteredInfo={filteredInfo}
+                setFilteredInfoScrollbar={(
+                  filteredInfoscrollbar: Array<IChartData>
+                ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
+                setSchoolOptions={(
+                  SchoolOptions: Array<{ value: string; label: string }>
+                ) => setSchoolOptions(SchoolOptions)}
+                campOptions={campOptions}
+              />
             </div>
           </div>
         </div>
@@ -281,8 +275,8 @@ const Dashboard = () => {
             <h1> lessons</h1>
             <p>
               in{" "}
-              {params.get("schoolvalue")
-                ? params.get("schoolvalue")
+              {params.get("schoolvalue")?.replaceAll("_", " ")
+                ? params.get("schoolvalue")?.replaceAll("_", " ")
                 : params.get("campvalue")
                 ? params.get("campvalue")
                 : params.get("countryvalue")
@@ -301,54 +295,72 @@ const Dashboard = () => {
                     }}
                   >
                     {filtereditem?.checked === "true" ? (
-                      <span
-                        style={{
-                          margin: "15px",
-                          width: "10px",
-                          height: "10px",
-                          backgroundColor: `#fff`,
-                          border: "1px solid #000",
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                        }}
-                        id={`${filtereditem.id}`}
-                        onClick={() => {
-                          handleChange(filtereditem.id, "false");
-                        }}
-                      ></span>
+                      <>
+                        <span
+                          style={{
+                            margin: "15px",
+                            width: "10px",
+                            height: "10px",
+                            backgroundColor: `#fff`,
+                            border: "1px solid #000",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                          }}
+                          id={`${filtereditem.id}`}
+                          onClick={() => {
+                            handleChange(filtereditem.id, "false");
+                          }}
+                        ></span>
+                        <a
+                          style={{ color: `${colors[index]}`, opacity: 0.5 }}
+                          href={`http://localhost:3000/school/${
+                            filtereditem.id
+                          }?countryvalue=${params.get(
+                            "countryvalue"
+                          )}&campvalue=${params.get(
+                            "campvalue"
+                          )}&schoolvalue=${params
+                            .get("schoolvalue")
+                            ?.replaceAll(" ", "_")}`}
+                        >
+                          <h1>{filtereditem.lessons}</h1> in{" "}
+                          {filtereditem.school}
+                        </a>
+                      </>
                     ) : (
-                      <span
-                        style={{
-                          margin: "15px",
-                          width: "10px",
-                          height: "10px",
-                          backgroundColor: `${colors[index]}`,
-                          border: "1px solid #000",
-                          borderRadius: "50%",
-                          cursor: "pointer",
-                          opacity: 0.5,
-                        }}
-                        id={`${filtereditem.id}`}
-                        onClick={() => {
-                          handleChange(filtereditem.id, "true");
-                        }}
-                      ></span>
+                      <>
+                        <span
+                          style={{
+                            margin: "15px",
+                            width: "10px",
+                            height: "10px",
+                            backgroundColor: `${colors[index]}`,
+                            border: "1px solid #000",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                          }}
+                          id={`${filtereditem.id}`}
+                          onClick={() => {
+                            handleChange(filtereditem.id, "true");
+                          }}
+                        ></span>
+                        <a
+                          style={{ color: `${colors[index]}` }}
+                          href={`http://localhost:3000/school/${
+                            filtereditem.id
+                          }?countryvalue=${params.get(
+                            "countryvalue"
+                          )}&campvalue=${params.get(
+                            "campvalue"
+                          )}&schoolvalue=${params
+                            .get("schoolvalue")
+                            ?.replaceAll(" ", "_")}`}
+                        >
+                          <h1>{filtereditem.lessons}</h1> in{" "}
+                          {filtereditem.school}
+                        </a>
+                      </>
                     )}
-
-                    <a
-                      style={{ color: `${colors[index]}` }}
-                      href={`http://localhost:3000/school/${
-                        filtereditem.id
-                      }?countryvalue=${params.get(
-                        "countryvalue"
-                      )}&campvalue=${params.get(
-                        "campvalue"
-                      )}&schoolvalue=${params
-                        .get("schoolvalue")
-                        ?.replaceAll(" ", "_")}`}
-                    >
-                      <h1>{filtereditem.lessons}</h1> in {filtereditem.school}
-                    </a>
                   </div>
                 );
               }

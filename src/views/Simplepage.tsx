@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import swal from "sweetalert2";
 
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface IChartData {
   camp: string;
@@ -37,7 +37,7 @@ const Dashboard = () => {
       .catch((e) => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
-  }, []);
+  });
 
   return (
     <>

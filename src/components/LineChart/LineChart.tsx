@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Chart, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
 import classes from "./LineChart.module.css";

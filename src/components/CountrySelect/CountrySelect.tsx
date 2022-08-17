@@ -91,6 +91,7 @@ function CountrySelect(props: any) {
   return (
     <>
       <Select
+        id={props.id}
         onChange={handleCountrySelect}
         menuPortalTarget={document.body}
         styles={{

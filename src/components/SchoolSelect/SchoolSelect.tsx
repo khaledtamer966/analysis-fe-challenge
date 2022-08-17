@@ -69,6 +69,7 @@ function SchoolSelect(props: any) {
   return (
     <>
       <Select
+        id={props.id}
         onChange={handleSchoolSelect}
         menuPortalTarget={document.body}
         styles={{

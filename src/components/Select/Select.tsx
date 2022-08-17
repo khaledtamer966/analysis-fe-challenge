@@ -4,6 +4,7 @@ function Select(props: any) {
   return (
     <>
       <SelectEelement
+        id={props.id}
         name={props.name}
         className={props.className}
         isMulti={props.isMulti}

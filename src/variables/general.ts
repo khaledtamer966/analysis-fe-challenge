@@ -76,7 +76,7 @@ export const colors = [
 export const removeStringDuplicateUsingFilter = (arr: Array<string>) => {
   let unique_array = arr.filter(
     (elem: string, index: number, self: Array<string>) => {
-      return index == self.indexOf(elem);
+      return index === self.indexOf(elem);
     }
   );
   return unique_array;
@@ -132,19 +132,20 @@ export const getValuesCorrectlyFromURLForChart = (
   URL: string
 ) => {
   let filteredarray = [...infoarray];
-  if (country !== "") {
+  if (country) {
     filteredarray = filteredarray.filter(
       (filteredItem: IChartData) => filteredItem.country === country
     );
   }
-  if (camp !== "") {
+  if (camp) {
     filteredarray = filteredarray.filter(
       (filteredItem: IChartData) => filteredItem.camp === camp
     );
   }
-  if (school !== "") {
+  if (school) {
     filteredarray = filteredarray.filter(
-      (filteredItem: IChartData) => filteredItem.school === school
+      (filteredItem: IChartData) =>
+        filteredItem.school === school.replaceAll("_", " ")
     );
   }
   return filteredarray;
