@@ -1,19 +1,18 @@
-import React, { useEffect, useState, SyntheticEvent } from "react";
+import React, { useEffect, useState } from "react";
 import LineChart from "../components/LineChart/LineChart";
-import Select from "../components/Select/Select";
 import axios from "axios";
 import swal from "sweetalert2";
-import { months } from "../variables/general";
-import { colors } from "../variables/general";
 import CountrySelect from "../components/CountrySelect/CountrySelect";
-import CampSelect from "../components/CampSelect/Campselect";
+import CampSelect from "../components/CampSelect/CampSelect";
 import SchoolSelect from "../components/SchoolSelect/SchoolSelect";
 import {
   removeStringDuplicateUsingFilter,
   removeObjDuplicateUsingFilter,
   calculateSum,
-  removeObjDuplicateUsingFilterbycountryandschool,
-  getValuesCorrectlyFromURLforChart,
+  removeObjDuplicateUsingFilterByCountryAndSchool,
+  getValuesCorrectlyFromURLForChart,
+  colors,
+  months,
 } from "../variables/general";
 
 import { useLocation } from "react-router-dom";
@@ -29,21 +28,7 @@ interface IChartData {
 
 const Dashboard = () => {
   let location = useLocation();
-  const [country, setCountry] = useState<string>(
-    location.search?.split("?")[1]?.split("=")[1]?.split("&")[0] !== ""
-      ? location.search?.split("?")[1]?.split("=")[1]?.split("&")[0]
-      : ""
-  );
-  const [camp, setCamp] = useState<string>(
-    location.search?.split("&")[1]?.split("=")[1] !== ""
-      ? location.search?.split("&")[1]?.split("=")[1]
-      : ""
-  );
-  const [school, setSchool] = useState<string>(
-    location.search?.split("&")[2]?.split("=")[1] !== ""
-      ? location.search?.split("&")[2]?.split("=")[1]?.replaceAll("_", " ")
-      : ""
-  );
+
   const [countryOptions, setCountryOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -54,15 +39,14 @@ const Dashboard = () => {
     { value: string; label: string }[]
   >([]);
   const [info, setInfo] = useState<IChartData[]>([]);
-  const [checked, setChecked] = useState("true");
 
-  const [ChosenIndex, setChosenIndex] = useState(-1);
   const [filteredInfoscrollbar, setFilteredInfoScrollbar] = useState<
     IChartData[]
   >([]);
 
   const [filteredInfo, setFilteredInfo] = useState<IChartData[]>([]);
-
+  let params = new URLSearchParams(window.location.search);
+  console.log(window.location.search, "search");
   useEffect(() => {
     swal.showLoading();
     axios
@@ -72,47 +56,31 @@ const Dashboard = () => {
       .then((res) => {
         //save full array
         setInfo(removeObjDuplicateUsingFilter(res.data));
-        console.log("search", location.search);
-        let countryvalue =
-          location.search === ""
-            ? ""
-            : location.search?.split("?")[1]?.split("=")[1]?.split("&")[0] !==
-              "undefined"
-            ? location.search?.split("?")[1]?.split("=")[1]?.split("&")[0]
-            : "";
-        let campvalue =
-          location.search === ""
-            ? ""
-            : location.search?.split("&")[1]?.split("=")[1] !== "undefined"
-            ? location.search?.split("&")[1]?.split("=")[1]
-            : "";
-        let schoolvalue =
-          location.search === ""
-            ? ""
-            : location.search?.split("&")[2]?.split("=")[1] !== "undefined"
-            ? location.search?.split("&")[2]?.split("=")[1]
-            : "";
-        setCountry(countryvalue);
-        setCamp(campvalue);
-        setSchool(schoolvalue);
+        if (window.location.href.search("countryvalue") === -1) {
+          window.history.pushState(
+            {},
+            "",
+            `http://localhost:3000?countryvalue=&campvalue=&schoolvalue=`
+          );
+        }
 
         setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            getValuesCorrectlyFromURLforChart(
-              countryvalue === "" ? "" : countryvalue,
-              campvalue === "" ? "" : campvalue,
-              schoolvalue === "" ? "" : schoolvalue.replaceAll("_", " "),
+          removeObjDuplicateUsingFilterByCountryAndSchool(
+            getValuesCorrectlyFromURLForChart(
+              params.get("countryvalue") ?? "",
+              params.get("campvalue") ?? "",
+              params.get("schoolvalue") ?? "",
               res.data,
               location.search
             ) ?? []
           )
         );
         setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            getValuesCorrectlyFromURLforChart(
-              countryvalue === "" ? "" : countryvalue,
-              campvalue === "" ? "" : campvalue,
-              schoolvalue === "" ? "" : schoolvalue.replaceAll("_", " "),
+          removeObjDuplicateUsingFilterByCountryAndSchool(
+            getValuesCorrectlyFromURLForChart(
+              params.get("countryvalue") ?? "",
+              params.get("campvalue") ?? "",
+              params.get("schoolvalue")?.replaceAll("_", " ") ?? "",
               res.data,
               location.search
             ) ?? []
@@ -159,7 +127,6 @@ const Dashboard = () => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
   }, []);
-  console.log(country, school, camp);
   const handleChange = (id: string, status: string) => {
     let tempinfo = [...filteredInfo];
     let tempscrollbar = [...filteredInfoscrollbar];
@@ -177,8 +144,6 @@ const Dashboard = () => {
     tempscrollbar[scrollindex].checked = status;
     setFilteredInfoScrollbar(tempscrollbar);
   };
-  console.log("schooloptions", schoolOptions);
-  console.log("filtered Info", filteredInfo);
   return (
     <>
       <div className="col-md-12">
@@ -207,10 +172,7 @@ const Dashboard = () => {
               <label>Select Country</label>
               {countryOptions.length !== 0 ? (
                 <CountrySelect
-                  camp={camp}
-                  school={school}
-                  setCountry={(country: string) => setCountry(country)}
-                  country={country}
+                  id="countryselect"
                   countryOptions={countryOptions}
                   info={info}
                   setFilteredInfo={(filteredInfo: Array<IChartData>) =>
@@ -232,11 +194,7 @@ const Dashboard = () => {
               <label>Select Camp</label>
               {campOptions.length !== 0 ? (
                 <CampSelect
-                  camp={camp}
-                  school={school}
-                  setCamp={(camp: string) => setCamp(camp)}
-                  country={country}
-                  SchoolOptions={schoolOptions}
+                  id="campselect"
                   info={info}
                   setFilteredInfo={(filteredInfo: Array<IChartData>) =>
                     setFilteredInfo(filteredInfo)
@@ -257,10 +215,7 @@ const Dashboard = () => {
               <label>Select School</label>
               {schoolOptions.length !== 0 ? (
                 <SchoolSelect
-                  camp={camp}
-                  school={school}
-                  setSchool={(school: string) => setSchool(school)}
-                  country={country}
+                  id="schoolselect"
                   schoolOptions={schoolOptions}
                   info={info}
                   setFilteredInfo={(filteredInfo: Array<IChartData>) =>
@@ -291,14 +246,17 @@ const Dashboard = () => {
                 (chartitem: IChartData, index: number) => {
                   return {
                     label: chartitem.school,
+                    tension: 0.5,
+                    borderWidth: 3,
                     data: info
                       ?.filter((item: IChartData) => {
-                        if (item.school == chartitem.school) {
+                        if (item.school === chartitem.school) {
                           return item.lessons;
                         }
                       })
                       ?.map((filteredelem: IChartData) => filteredelem.lessons),
                     backgroundColor: colors[index],
+                    borderColor: colors[index],
                   };
                 }
               )}
@@ -322,13 +280,21 @@ const Dashboard = () => {
             </h1>
             <h1> lessons</h1>
             <p>
-              in {school ? school : camp ? camp : country ? country : "Dataset"}
+              in{" "}
+              {params.get("schoolvalue")
+                ? params.get("schoolvalue")
+                : params.get("campvalue")
+                ? params.get("campvalue")
+                : params.get("countryvalue")
+                ? params.get("countryvalue")
+                : "Dataset"}
             </p>
 
             {filteredInfoscrollbar?.map(
               (filtereditem: IChartData, index: number) => {
                 return (
                   <div
+                    key={filtereditem.id}
                     style={{
                       color: `${colors[index]}`,
                       display: "flex",
@@ -360,6 +326,7 @@ const Dashboard = () => {
                           border: "1px solid #000",
                           borderRadius: "50%",
                           cursor: "pointer",
+                          opacity: 0.5,
                         }}
                         id={`${filtereditem.id}`}
                         onClick={() => {
@@ -372,10 +339,13 @@ const Dashboard = () => {
                       style={{ color: `${colors[index]}` }}
                       href={`http://localhost:3000/school/${
                         filtereditem.id
-                      }?countryvalue=${country}&campvalue=${camp}&schoolvalue=${school?.replaceAll(
-                        " ",
-                        "_"
-                      )}&filtedarr=${JSON.stringify(filteredInfo)}`}
+                      }?countryvalue=${params.get(
+                        "countryvalue"
+                      )}&campvalue=${params.get(
+                        "campvalue"
+                      )}&schoolvalue=${params
+                        .get("schoolvalue")
+                        ?.replaceAll(" ", "_")}`}
                     >
                       <h1>{filtereditem.lessons}</h1> in {filtereditem.school}
                     </a>

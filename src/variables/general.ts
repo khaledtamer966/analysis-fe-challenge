@@ -112,7 +112,7 @@ export const calculateSum = (arr: Array<number>) => {
     return total + current;
   }, 0);
 };
-export const removeObjDuplicateUsingFilterbycountryandschool = (
+export const removeObjDuplicateUsingFilterByCountryAndSchool = (
   obj: Array<IChartData>
 ) => {
   let uniquearray = obj?.filter(
@@ -124,50 +124,28 @@ export const removeObjDuplicateUsingFilterbycountryandschool = (
   );
   return uniquearray;
 };
-export const getValuesCorrectlyFromURLforChart = (
+export const getValuesCorrectlyFromURLForChart = (
   country: string,
   camp: string,
   school: string,
   infoarray: Array<IChartData>,
   URL: string
 ) => {
-  if (URL === "") {
-    return infoarray;
-  } else if (country !== "" && camp !== "" && school !== "") {
-    return infoarray?.filter(
-      (filteredItem: IChartData) =>
-        filteredItem.country === country &&
-        filteredItem.camp === camp &&
-        filteredItem.school === school
-    );
-  } else if (country !== "" && camp !== "") {
-    return infoarray?.filter(
-      (filteredItem: IChartData) =>
-        filteredItem.country === country && filteredItem.camp === camp
-    );
-  } else if (country !== "" && school !== "") {
-    return infoarray?.filter(
-      (filteredItem: IChartData) =>
-        filteredItem.country === country && filteredItem.school === school
-    );
-  } else if (camp !== "" && school !== "") {
-    return infoarray?.filter(
-      (filteredItem: IChartData) =>
-        filteredItem.camp === camp && filteredItem.school === school
-    );
-  } else if (camp !== "") {
-    return infoarray?.filter(
-      (filteredItem: IChartData) => filteredItem.camp === camp
-    );
-  } else if (school !== "") {
-    return infoarray?.filter(
-      (filteredItem: IChartData) => filteredItem.school === school
-    );
-  } else if (country !== "") {
-    return infoarray?.filter(
+  let filteredarray = [...infoarray];
+  if (country !== "") {
+    filteredarray = filteredarray.filter(
       (filteredItem: IChartData) => filteredItem.country === country
     );
-  } else {
-    return infoarray;
   }
+  if (camp !== "") {
+    filteredarray = filteredarray.filter(
+      (filteredItem: IChartData) => filteredItem.camp === camp
+    );
+  }
+  if (school !== "") {
+    filteredarray = filteredarray.filter(
+      (filteredItem: IChartData) => filteredItem.school === school
+    );
+  }
+  return filteredarray;
 };

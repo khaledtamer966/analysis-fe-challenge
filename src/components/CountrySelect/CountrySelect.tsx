@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
 import Select from "../Select/Select";
-import { useLocation } from "react-router-dom";
 import {
   removeDuplicateOptionsUsingFilter,
-  removeObjDuplicateUsingFilterbycountryandschool,
+  removeObjDuplicateUsingFilterByCountryAndSchool,
 } from "../../variables/general";
 interface IChartData {
   camp: string;
@@ -16,251 +14,79 @@ interface IChartData {
 }
 
 function CountrySelect(props: any) {
-  let location = useLocation();
+  let params = new URLSearchParams(window.location.search);
 
   const handleCountrySelect = (selectedOption: {
     value: string;
     label: string;
   }) => {
+    let temparrinfo: Array<IChartData> = [];
+    let temparrOptions: Array<{ value: string; label: string }> = [];
     if (selectedOption) {
-      props.setCountry(selectedOption.label);
-      if (props.camp !== "" && props.school !== "") {
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            removeObjDuplicateUsingFilterbycountryandschool(
-              props.info?.filter(
-                (filtereditem: IChartData) =>
-                  filtereditem.country === selectedOption.label &&
-                  filtereditem.camp === props.camp &&
-                  filtereditem.school === props.school
-              )
-            ).map((option: IChartData) => {
-              return { value: option.camp, label: option.camp };
-            })
+      window.history.pushState(
+        {},
+        "",
+        `http://localhost:3000?countryvalue=${
+          selectedOption.label
+        }&campvalue=${params.get("campvalue")}&schoolvalue=${params.get(
+          "schoolvalue"
+        )}`
+      );
+
+      temparrOptions = removeDuplicateOptionsUsingFilter(
+        removeObjDuplicateUsingFilterByCountryAndSchool(
+          props.info?.filter(
+            (filtereditem: IChartData) =>
+              filtereditem.country === selectedOption.label
           )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label &&
-                filtereditem.camp === props.camp &&
-                filtereditem.school === props.school
-            )
-          )
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label &&
-                filtereditem.camp === props.camp &&
-                filtereditem.school === props.school
-            )
-          )
-        );
-      } else if (props.camp !== "") {
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            removeObjDuplicateUsingFilterbycountryandschool(
-              props.info?.filter(
-                (filtereditem: IChartData) =>
-                  filtereditem.country === selectedOption.label &&
-                  filtereditem.camp === props.camp
-              )
-            ).map((option: IChartData) => {
-              return { value: option.camp, label: option.camp };
-            })
-          )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label &&
-                filtereditem.camp === props.camp
-            )
-          )
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label &&
-                filtereditem.camp === props.camp
-            )
-          )
-        );
-      } else if (props.school !== "") {
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            removeObjDuplicateUsingFilterbycountryandschool(
-              props.info?.filter(
-                (filtereditem: IChartData) =>
-                  filtereditem.country === selectedOption.label &&
-                  filtereditem.camp === props.camp
-              )
-            ).map((option: IChartData) => {
-              return { value: option.camp, label: option.camp };
-            })
-          )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label &&
-                filtereditem.school === props.school
-            )
-          )
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label &&
-                filtereditem.school === props.school
-            )
-          )
-        );
-      } else {
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            props.info
-              ?.filter(
-                (filtereditem: IChartData) =>
-                  filtereditem.country === selectedOption.label
-              )
-              .map((option: IChartData) => {
-                return { value: option.camp, label: option.camp };
-              })
-          )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label
-            )
-          )
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.country === selectedOption.label
-            )
-          )
-        );
-      }
+        ).map((option: IChartData) => {
+          return { value: option.camp, label: option.camp };
+        })
+      );
+      temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
+        props.info.filter(
+          (filtereditem: IChartData) =>
+            filtereditem.country === selectedOption.label
+        )
+      );
     } else {
-      props.setCountry("");
-      if (props.camp !== "" && props.school !== "") {
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            removeObjDuplicateUsingFilterbycountryandschool(
-              props.info?.filter(
-                (filtereditem: IChartData) =>
-                  filtereditem.camp === props.camp &&
-                  filtereditem.school === props.school
-              )
-            ).map((option: IChartData) => {
-              return { value: option.camp, label: option.camp };
-            })
-          )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.camp === props.camp &&
-                filtereditem.school === props.school
-            )
-          )
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) =>
-                filtereditem.camp === props.camp &&
-                filtereditem.school === props.school
-            )
-          )
-        );
-      } else if (props.camp !== "") {
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            removeObjDuplicateUsingFilterbycountryandschool(props.info).map(
-              (option: IChartData) => {
-                return { value: option.camp, label: option.camp };
-              }
-            )
-          )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info?.filter(
-              (filtereditem: IChartData) => filtereditem.camp === props.camp
-            )
-          )
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info?.filter(
-              (filtereditem: IChartData) => filtereditem.camp === props.camp
-            )
-          )
-        );
-      } else if (props.school !== "") {
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            removeObjDuplicateUsingFilterbycountryandschool(
-              props.info?.filter(
-                (filtereditem: IChartData) => filtereditem.camp === props.camp
-              )
-            ).map((option: IChartData) => {
-              return { value: option.camp, label: option.camp };
-            })
-          )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) => filtereditem.school === props.school
-            )
-          )
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(
-            props.info.filter(
-              (filtereditem: IChartData) => filtereditem.school === props.school
-            )
-          )
-        );
-      } else {
-        console.log(
-          "i am here",
-          removeDuplicateOptionsUsingFilter(
-            props.info?.map((option: IChartData) => {
-              return { value: option.camp, label: option.camp };
-            })
-          )
-        );
-        props.setCampOptions(
-          removeDuplicateOptionsUsingFilter(
-            props.info?.map((option: IChartData) => {
-              return { value: option.camp, label: option.camp };
-            })
-          )
-        );
-        props.setFilteredInfo(
-          removeObjDuplicateUsingFilterbycountryandschool(props.info)
-        );
-        props.setFilteredInfoScrollbar(
-          removeObjDuplicateUsingFilterbycountryandschool(props.info)
-        );
-      }
+      window.history.pushState(
+        {},
+        "",
+        `http://localhost:3000?countryvalue=&campvalue=${params.get(
+          "campvalue"
+        )}&schoolvalue=${params.get("schoolvalue")}`
+      );
+
+      temparrOptions = removeDuplicateOptionsUsingFilter(
+        removeObjDuplicateUsingFilterByCountryAndSchool(props.info).map(
+          (option: IChartData) => {
+            return { value: option.camp, label: option.camp };
+          }
+        )
+      );
+      temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(props.info);
     }
+    if (params.get("campvalue")) {
+      temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
+        props.info.filter(
+          (filtereditem: IChartData) =>
+            filtereditem.camp === params.get("campvalue")
+        )
+      );
+    }
+    if (params.get("schoolvalue")) {
+      temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
+        props.info.filter(
+          (filtereditem: IChartData) =>
+            filtereditem.school ===
+            params.get("schoolvalue")?.replaceAll("_", " ")
+        )
+      );
+    }
+    props.setFilteredInfo(temparrinfo);
+    props.setCampOptions(temparrOptions);
+    props.setFilteredInfoScrollbar(temparrinfo);
   };
   return (
     <>
@@ -276,15 +102,12 @@ function CountrySelect(props: any) {
         }}
         defaultValue={props.countryOptions.filter(
           (op: { value: string; label: string }) =>
-            op.value ==
-            location.search?.split("?")[1]?.split("=")[1]?.split("&")[0]
+            op.value === params.get("countryvalue")
         )}
         options={props.countryOptions}
         value={props.countryOptions.filter(
           (op: { value: string; label: string }) =>
-            op.value === props.country ||
-            op.value ==
-              location.search?.split("?")[1]?.split("=")[1]?.split("&")[0]
+            op.value === params.get("countryvalue")
         )}
       />
     </>
