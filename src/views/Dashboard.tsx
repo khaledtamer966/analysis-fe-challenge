@@ -126,7 +126,7 @@ const Dashboard = () => {
       .catch((e) => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
-  });
+  }, []);
   const handleChange = (id: string, status: string) => {
     let tempinfo = [...filteredInfo];
     let tempscrollbar = [...filteredInfoscrollbar];
