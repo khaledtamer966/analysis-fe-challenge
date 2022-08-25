@@ -11,6 +11,7 @@ interface IChartData {
   month: string;
   school: string;
   checked: string;
+  color: string;
 }
 
 function CountrySelect(props: any) {
@@ -84,6 +85,7 @@ function CountrySelect(props: any) {
         )
       );
     }
+
     props.setFilteredInfo(temparrinfo);
     props.setCampOptions(temparrOptions);
     props.setFilteredInfoScrollbar(temparrinfo);

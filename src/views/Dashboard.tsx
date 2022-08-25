@@ -15,7 +15,6 @@ import {
   months,
 } from "../variables/general";
 
-import { useLocation } from "react-router-dom";
 interface IChartData {
   camp: string;
   country: string;
@@ -24,11 +23,10 @@ interface IChartData {
   month: string;
   school: string;
   checked: string;
+  color: string;
 }
 
 const Dashboard = () => {
-  let location = useLocation();
-
   const [countryOptions, setCountryOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -54,8 +52,12 @@ const Dashboard = () => {
         `https://raw.githubusercontent.com/abdelrhman-arnos/analysis-fe-challenge/master/data.json`
       )
       .then((res) => {
+        let dataarr = res?.data?.map((item: IChartData, index: number) => {
+          item.color = colors[index];
+          return item;
+        });
         //save full array
-        setInfo(removeObjDuplicateUsingFilter(res.data));
+        setInfo(removeObjDuplicateUsingFilter(dataarr));
         if (window.location.href.search("countryvalue") === -1) {
           window.history.pushState(
             {},
@@ -70,8 +72,7 @@ const Dashboard = () => {
               params.get("countryvalue") ?? "",
               params.get("campvalue") ?? "",
               params.get("schoolvalue") ?? "",
-              res.data,
-              location.search
+              dataarr
             ) ?? []
           )
         );
@@ -81,21 +82,20 @@ const Dashboard = () => {
               params.get("countryvalue") ?? "",
               params.get("campvalue") ?? "",
               params.get("schoolvalue")?.replaceAll("_", " ") ?? "",
-              res.data,
-              location.search
+              dataarr
             ) ?? []
           )
         );
 
         //remove Duplicates in countries,camps,and schools
         let filteredCountryArr = removeStringDuplicateUsingFilter(
-          res.data.map((record: IChartData) => record.country)
+          dataarr.map((record: IChartData) => record.country)
         );
         let filteredCampArr = removeStringDuplicateUsingFilter(
-          res.data.map((record: IChartData) => record.camp)
+          dataarr.map((record: IChartData) => record.camp)
         );
         let filteredSchoolArr = removeStringDuplicateUsingFilter(
-          res.data.map((record: IChartData) => record.school)
+          dataarr.map((record: IChartData) => record.school)
         );
         let newCountryOptions: { value: string; label: string }[] =
           filteredCountryArr?.map((country: string) => {
@@ -243,14 +243,15 @@ const Dashboard = () => {
                     tension: 0.5,
                     borderWidth: 3,
                     data: info
+                      // eslint-disable-next-line array-callback-return
                       ?.filter((item: IChartData) => {
                         if (item.school === chartitem.school) {
                           return item.lessons;
                         }
                       })
                       ?.map((filteredelem: IChartData) => filteredelem.lessons),
-                    backgroundColor: colors[index],
-                    borderColor: colors[index],
+                    backgroundColor: chartitem.color,
+                    borderColor: chartitem.color,
                   };
                 }
               )}
@@ -290,7 +291,7 @@ const Dashboard = () => {
                   <div
                     key={filtereditem.id}
                     style={{
-                      color: `${colors[index]}`,
+                      color: `${filtereditem.color}`,
                       display: "flex",
                     }}
                   >
@@ -312,7 +313,10 @@ const Dashboard = () => {
                           }}
                         ></span>
                         <a
-                          style={{ color: `${colors[index]}`, opacity: 0.5 }}
+                          style={{
+                            color: `${filtereditem.color}`,
+                            opacity: 0.5,
+                          }}
                           href={`http://localhost:3000/school/${
                             filtereditem.id
                           }?countryvalue=${params.get(
@@ -334,7 +338,7 @@ const Dashboard = () => {
                             margin: "15px",
                             width: "10px",
                             height: "10px",
-                            backgroundColor: `${colors[index]}`,
+                            backgroundColor: `${filtereditem.color}`,
                             border: "1px solid #000",
                             borderRadius: "50%",
                             cursor: "pointer",
@@ -345,7 +349,7 @@ const Dashboard = () => {
                           }}
                         ></span>
                         <a
-                          style={{ color: `${colors[index]}` }}
+                          style={{ color: `${filtereditem.color}` }}
                           href={`http://localhost:3000/school/${
                             filtereditem.id
                           }?countryvalue=${params.get(

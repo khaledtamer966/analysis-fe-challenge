@@ -6,6 +6,7 @@ interface IChartData {
   month: string;
   school: string;
   checked: string;
+  color: string;
 }
 export const months = [
   "Jan",
@@ -147,8 +148,7 @@ export const getValuesCorrectlyFromURLForChart = (
   country: string,
   camp: string,
   school: string,
-  infoarray: Array<IChartData>,
-  URL: string
+  infoarray: Array<IChartData>
 ) => {
   let filteredarray = [...infoarray];
   if (country) {

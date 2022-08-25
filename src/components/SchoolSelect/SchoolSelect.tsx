@@ -8,6 +8,7 @@ interface IChartData {
   month: string;
   school: string;
   checked: string;
+  color: string;
 }
 
 function SchoolSelect(props: any) {
@@ -63,6 +64,7 @@ function SchoolSelect(props: any) {
         )
       );
     }
+
     props.setFilteredInfo(temparrinfo);
     props.setFilteredInfoScrollbar(temparrinfo);
   };
