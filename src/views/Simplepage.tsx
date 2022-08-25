@@ -37,7 +37,8 @@ const Dashboard = () => {
       .catch((e) => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

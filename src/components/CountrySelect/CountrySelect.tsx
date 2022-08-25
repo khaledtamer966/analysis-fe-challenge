@@ -90,6 +90,13 @@ function CountrySelect(props: any) {
     props.setCampOptions(temparrOptions);
     props.setFilteredInfoScrollbar(temparrinfo);
   };
+  console.log(
+    props.countryOptions.filter(
+      (op: { value: string; label: string }) =>
+        op.label === params.get("countryvalue")
+    ),
+    "countryvalue"
+  );
   return (
     <>
       <Select
@@ -103,12 +110,12 @@ function CountrySelect(props: any) {
             color: "black",
           }),
         }}
-        defaultValue={props.countryOptions.filter(
+        defaultValue={props.countryOptions?.filter(
           (op: { value: string; label: string }) =>
             op.value === params.get("countryvalue")
         )}
         options={props.countryOptions}
-        value={props.countryOptions.filter(
+        value={props.countryOptions?.filter(
           (op: { value: string; label: string }) =>
             op.value === params.get("countryvalue")
         )}

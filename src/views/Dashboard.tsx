@@ -53,7 +53,7 @@ const Dashboard = () => {
       )
       .then((res) => {
         let dataarr = res?.data?.map((item: IChartData, index: number) => {
-          item.color = colors[index];
+          item.color = colors[Math.floor(Math.random() * colors.length)];
           return item;
         });
         //save full array
@@ -126,6 +126,7 @@ const Dashboard = () => {
       .catch((e) => {
         swal.fire("Seasion Ends Please Resign In Again", "", "error");
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleChange = (id: string, status: string) => {
     let tempinfo = [...filteredInfo];
@@ -170,66 +171,72 @@ const Dashboard = () => {
           <div className="row" style={{ marginLeft: "2%", marginRight: "2%" }}>
             <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select Country</label>
-              <CountrySelect
-                id="countryselect"
-                countryOptions={countryOptions}
-                info={info}
-                setFilteredInfo={(filteredInfo: Array<IChartData>) =>
-                  setFilteredInfo(filteredInfo)
-                }
-                filteredInfoscrollbar={filteredInfoscrollbar}
-                filteredInfo={filteredInfo}
-                setFilteredInfoScrollbar={(
-                  filteredInfoscrollbar: Array<IChartData>
-                ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
-                setCampOptions={(
-                  campOptions: Array<{ value: string; label: string }>
-                ) => setCampOptions(campOptions)}
-                campOptions={campOptions}
-              />
+              {countryOptions.length !== 0 ? (
+                <CountrySelect
+                  id="countryselect"
+                  countryOptions={countryOptions}
+                  info={info}
+                  setFilteredInfo={(filteredInfo: Array<IChartData>) =>
+                    setFilteredInfo(filteredInfo)
+                  }
+                  filteredInfoscrollbar={filteredInfoscrollbar}
+                  filteredInfo={filteredInfo}
+                  setFilteredInfoScrollbar={(
+                    filteredInfoscrollbar: Array<IChartData>
+                  ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
+                  setCampOptions={(
+                    campOptions: Array<{ value: string; label: string }>
+                  ) => setCampOptions(campOptions)}
+                  campOptions={campOptions}
+                />
+              ) : null}
             </div>
             <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select Camp</label>
-              <CampSelect
-                id="campselect"
-                info={info}
-                setFilteredInfo={(filteredInfo: Array<IChartData>) =>
-                  setFilteredInfo(filteredInfo)
-                }
-                filteredInfoscrollbar={filteredInfoscrollbar}
-                filteredInfo={filteredInfo}
-                setFilteredInfoScrollbar={(
-                  filteredInfoscrollbar: Array<IChartData>
-                ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
-                setSchoolOptions={(
-                  SchoolOptions: Array<{ value: string; label: string }>
-                ) => setSchoolOptions(SchoolOptions)}
-                campOptions={campOptions}
-              />
+              {campOptions.length !== 0 ? (
+                <CampSelect
+                  id="campselect"
+                  info={info}
+                  setFilteredInfo={(filteredInfo: Array<IChartData>) =>
+                    setFilteredInfo(filteredInfo)
+                  }
+                  filteredInfoscrollbar={filteredInfoscrollbar}
+                  filteredInfo={filteredInfo}
+                  setFilteredInfoScrollbar={(
+                    filteredInfoscrollbar: Array<IChartData>
+                  ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
+                  setSchoolOptions={(
+                    SchoolOptions: Array<{ value: string; label: string }>
+                  ) => setSchoolOptions(SchoolOptions)}
+                  campOptions={campOptions}
+                />
+              ) : null}
             </div>
             <div className="col-md-4" style={{ marginBottom: "1%" }}>
               <label>Select School</label>
-              <SchoolSelect
-                id="schoolselect"
-                schoolOptions={schoolOptions}
-                info={info}
-                setFilteredInfo={(filteredInfo: Array<IChartData>) =>
-                  setFilteredInfo(filteredInfo)
-                }
-                filteredInfoscrollbar={filteredInfoscrollbar}
-                filteredInfo={filteredInfo}
-                setFilteredInfoScrollbar={(
-                  filteredInfoscrollbar: Array<IChartData>
-                ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
-                setSchoolOptions={(
-                  SchoolOptions: Array<{ value: string; label: string }>
-                ) => setSchoolOptions(SchoolOptions)}
-                campOptions={campOptions}
-              />
+              {schoolOptions.length !== 0 ? (
+                <SchoolSelect
+                  id="schoolselect"
+                  schoolOptions={schoolOptions}
+                  info={info}
+                  setFilteredInfo={(filteredInfo: Array<IChartData>) =>
+                    setFilteredInfo(filteredInfo)
+                  }
+                  filteredInfoscrollbar={filteredInfoscrollbar}
+                  filteredInfo={filteredInfo}
+                  setFilteredInfoScrollbar={(
+                    filteredInfoscrollbar: Array<IChartData>
+                  ) => setFilteredInfoScrollbar(filteredInfoscrollbar)}
+                  setSchoolOptions={(
+                    SchoolOptions: Array<{ value: string; label: string }>
+                  ) => setSchoolOptions(SchoolOptions)}
+                  campOptions={campOptions}
+                />
+              ) : null}
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row my-2">
           <span
             className="col-md-9"
             style={{ marginLeft: "5%", borderRight: "1px solid" }}
@@ -260,10 +267,11 @@ const Dashboard = () => {
           <span
             className="col-md-2"
             style={{
-              backgroundColor: "white",
+              backgroundColor: "light grey",
               marginLeft: "2%",
               maxHeight: "500px",
               overflowY: "scroll",
+              backgroundBlendMode: "color",
             }}
           >
             <h1>
