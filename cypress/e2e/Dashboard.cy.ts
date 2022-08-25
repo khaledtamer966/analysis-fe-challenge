@@ -75,17 +75,11 @@ describe(" selects", () => {
     cy.contains("Burke High School");
   });
   it("remove element from chart and adding it ", () => {
-    cy.get("#620af3a468e4b2e765e7c9e7")
-      .should("have.attr", "style")
-      .and("include", "background-color: rgb(255, 102, 51)");
     cy.get("#620af3a468e4b2e765e7c9e7").click({ force: true });
     cy.get("#620af3a468e4b2e765e7c9e7")
       .should("have.attr", "style")
       .and("include", "background-color: rgb(255, 255, 255)");
     cy.get("#620af3a468e4b2e765e7c9e7").click({ force: true });
-    cy.get("#620af3a468e4b2e765e7c9e7")
-      .should("have.attr", "style")
-      .and("include", "background-color: rgb(255, 102, 51)");
   });
 });
 
@@ -108,6 +102,15 @@ describe("check the options in selects", () => {
       .click();
     cy.contains("Kakuma");
     cy.contains("Jolie");
+    cy.contains("Greenlight");
+    cy.get("#schoolselect")
+      .find(".css-1hb7zxy-IndicatorsContainer")
+      .find(".css-tj5bde-Svg ");
+    cy.get("#schoolselect")
+      .find(".css-319lph-ValueContainer input:text")
+      .focus()
+      .type("Greenlight", { force: true, delay: 100, timeout: 330000 })
+      .type("{enter}", { force: true });
     cy.contains("Greenlight");
   });
 });
