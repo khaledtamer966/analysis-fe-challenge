@@ -1,8 +1,12 @@
-import Select from "../Select/Select";
+import { useContext } from "react";
+import Select from "@components/Select/Select";
 import {
   removeDuplicateOptionsUsingFilter,
   removeObjDuplicateUsingFilterByCountryAndSchool,
-} from "../../variables/general";
+} from "@variables/general";
+import { CampContext } from "../../contexts/CampContext";
+import { CountryContext } from "../../contexts/CountryContext";
+import { SchoolContext } from "../../contexts/SchoolContext";
 interface IChartData {
   camp: string;
   country: string;
@@ -15,24 +19,17 @@ interface IChartData {
 }
 
 function CampSelect(props: any) {
-  let params = new URLSearchParams(window.location.search);
+  const { camp, setCamp } = useContext(CampContext);
+  const { country } = useContext(CountryContext);
+  const { school } = useContext(SchoolContext);
   const handleCampSelect = (selectedOption: {
     value: string;
     label: string;
   }) => {
     let temparrinfo: Array<IChartData> = [];
     let temparrOptions: Array<{ value: string; label: string }> = [];
-    console.log("selectedOption", selectedOption);
     if (selectedOption) {
-      window.history.pushState(
-        {},
-        "",
-        `http://localhost:3000?countryvalue=${params.get(
-          "countryvalue"
-        )}&campvalue=${selectedOption.label}&schoolvalue=${params.get(
-          "schoolvalue"
-        )}`
-      );
+      setCamp(selectedOption.label);
 
       temparrOptions = removeDuplicateOptionsUsingFilter(
         removeObjDuplicateUsingFilterByCountryAndSchool(
@@ -50,15 +47,8 @@ function CampSelect(props: any) {
             filtereditem.camp === selectedOption.label
         )
       );
-      console.log("data camp", temparrinfo);
     } else {
-      window.history.pushState(
-        {},
-        "",
-        `http://localhost:3000?countryvalue=${params.get(
-          "countryvalue"
-        )}&campvalue=&schoolvalue=${params.get("schoolvalue")}`
-      );
+      setCamp("");
 
       temparrOptions = removeDuplicateOptionsUsingFilter(
         removeObjDuplicateUsingFilterByCountryAndSchool(props.info).map(
@@ -69,13 +59,11 @@ function CampSelect(props: any) {
       );
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(props.info);
     }
-    if (params.get("countryvalue")) {
-      console.log("camp country", params.get("countryvalue"));
+    if (country !== "") {
       temparrOptions = removeDuplicateOptionsUsingFilter(
         removeObjDuplicateUsingFilterByCountryAndSchool(
           temparrinfo?.filter(
-            (filtereditem: IChartData) =>
-              filtereditem.country === params.get("countryvalue")
+            (filtereditem: IChartData) => filtereditem.country === country
           )
         ).map((option: IChartData) => {
           return { value: option.school, label: option.school };
@@ -83,19 +71,14 @@ function CampSelect(props: any) {
       );
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         temparrinfo?.filter(
-          (filtereditem: IChartData) =>
-            filtereditem.country === params.get("countryvalue")
+          (filtereditem: IChartData) => filtereditem.country === country
         )
       );
     }
-    if (params.get("schoolvalue")) {
-      console.log("camp school", params.get("schoolvalue"));
-
+    if (school !== "") {
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         temparrinfo?.filter(
-          (filtereditem: IChartData) =>
-            filtereditem.school ===
-            params.get("schoolvalue")?.replaceAll("_", " ")
+          (filtereditem: IChartData) => filtereditem.school === school
         )
       );
     }
@@ -118,13 +101,11 @@ function CampSelect(props: any) {
           }),
         }}
         defaultValue={props.campOptions.filter(
-          (op: { value: string; label: string }) =>
-            op.value === params.get("campvalue")
+          (op: { value: string; label: string }) => op.value === camp
         )}
         options={props.campOptions}
         value={props.campOptions.filter(
-          (op: { value: string; label: string }) =>
-            op.value === params.get("campvalue")
+          (op: { value: string; label: string }) => op.value === camp
         )}
       />
     </>

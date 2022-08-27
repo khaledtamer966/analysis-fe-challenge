@@ -14,8 +14,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@images/*": ["./src/assets/*"],
+      "@views/*": ["./src/views/*"],
+      "@variables/*": ["./src/variables/*"]
+    }
   },
-  "include": ["src"],
-  "exclude": ["src/main/test/cypress"]
+  "include": ["src", "craco.config.ts"],
+  "exclude": ["src/main/test/cypress", "node_modules"]
 }

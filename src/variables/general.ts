@@ -167,5 +167,8 @@ export const getValuesCorrectlyFromURLForChart = (
         filteredItem.school === school.replaceAll("_", " ")
     );
   }
+  if (filteredarray.length === 0) {
+    filteredarray = [...infoarray];
+  }
   return filteredarray;
 };

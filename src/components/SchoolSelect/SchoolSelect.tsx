@@ -1,5 +1,9 @@
-import Select from "../Select/Select";
-import { removeObjDuplicateUsingFilterByCountryAndSchool } from "../../variables/general";
+import { useContext } from "react";
+import Select from "@components/Select/Select";
+import { removeObjDuplicateUsingFilterByCountryAndSchool } from "@variables/general";
+import { CampContext } from "../../contexts/CampContext";
+import { CountryContext } from "../../contexts/CountryContext";
+import { SchoolContext } from "../../contexts/SchoolContext";
 interface IChartData {
   camp: string;
   country: string;
@@ -12,24 +16,17 @@ interface IChartData {
 }
 
 function SchoolSelect(props: any) {
-  let params = new URLSearchParams(window.location.search);
+  const { school, setSchool } = useContext(SchoolContext);
+  const { country } = useContext(CountryContext);
+  const { camp } = useContext(CampContext);
   const handleSchoolSelect = (selectedOption: {
     value: string;
     label: string;
   }) => {
     let temparrinfo: Array<IChartData> = [];
     if (selectedOption) {
-      window.history.pushState(
-        {},
-        "",
-        `http://localhost:3000?countryvalue=${params.get(
-          "countryvalue"
-        )}&campvalue=${params.get(
-          "campvalue"
-        )}&schoolvalue=${selectedOption.label?.replaceAll(" ", "_")}`
-      );
+      setSchool(selectedOption.label);
 
-      console.log(params.get("schoolvalue"));
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         props.info?.filter(
           (filtereditem: IChartData) =>
@@ -37,30 +34,21 @@ function SchoolSelect(props: any) {
         )
       );
     } else {
-      window.history.pushState(
-        {},
-        "",
-        `http://localhost:3000?countryvalue=${params.get(
-          "countryvalue"
-        )}&campvalue=${params.get("campvalue")}&schoolvalue=`
-      );
+      setSchool("");
 
-      console.log(params.get("schoolvalue"));
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(props.info);
     }
-    if (params.get("campvalue")) {
+    if (camp !== "") {
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         temparrinfo?.filter(
-          (filtereditem: IChartData) =>
-            filtereditem.camp === params.get("campvalue")
+          (filtereditem: IChartData) => filtereditem.camp === camp
         )
       );
     }
-    if (params.get("countryvalue")) {
+    if (country !== "") {
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         temparrinfo?.filter(
-          (filtereditem: IChartData) =>
-            filtereditem.country === params.get("countryvalue")
+          (filtereditem: IChartData) => filtereditem.country === country
         )
       );
     }
@@ -82,13 +70,11 @@ function SchoolSelect(props: any) {
           }),
         }}
         defaultValue={props.schoolOptions.filter(
-          (op: { value: string; label: string }) =>
-            op.value === params.get("schoolvalue")?.replaceAll("_", " ")
+          (op: { value: string; label: string }) => op.value === school
         )}
         options={props.schoolOptions}
         value={props.schoolOptions.filter(
-          (op: { value: string; label: string }) =>
-            op.value === params.get("schoolvalue")?.replaceAll("_", " ")
+          (op: { value: string; label: string }) => op.value === school
         )}
       />
     </>

@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import axios from "axios";
 import swal from "sweetalert2";
-
 import { useParams } from "react-router-dom";
+import { CountryContext } from "../contexts/CountryContext";
+import { CampContext } from "../contexts/CampContext";
+import { SchoolContext } from "../contexts/SchoolContext";
+import { Link } from "react-router-dom";
 
 interface IChartData {
   camp: string;
@@ -15,8 +18,11 @@ interface IChartData {
   checked: string;
 }
 
-const Dashboard = () => {
-  let params = new URLSearchParams(window.location.search);
+const DetailsPage = () => {
+  const { country } = useContext(CountryContext);
+  const { camp } = useContext(CampContext);
+  const { school } = useContext(SchoolContext);
+  console.log(country, camp, school);
   const { id } = useParams<{ id?: string }>();
 
   const [record, setRecord] = useState<IChartData>();
@@ -43,20 +49,9 @@ const Dashboard = () => {
   return (
     <>
       <div style={{ margin: "10%" }}>
-        <button
-          className="btn btn-danger my-2"
-          onClick={() =>
-            window.location.replace(
-              `http://localhost:3000?countryvalue=${params.get(
-                "countryvalue"
-              )}&campvalue=${params.get("campvalue")}&schoolvalue=${params.get(
-                "schoolvalue"
-              )}`
-            )
-          }
-        >
+        <Link className="btn btn-danger my-2" to="/">
           Back
-        </button>
+        </Link>
         <div className="table-responsive">
           <table className="table table-bordered">
             <thead>
@@ -82,4 +77,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DetailsPage;

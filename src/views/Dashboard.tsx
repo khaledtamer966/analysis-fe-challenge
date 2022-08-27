@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import LineChart from "../components/LineChart/LineChart";
+import React, { useEffect, useState, useContext } from "react";
+import LineChart from "@components/LineChart/LineChart";
 import axios from "axios";
 import swal from "sweetalert2";
-import CountrySelect from "../components/CountrySelect/CountrySelect";
-import CampSelect from "../components/CampSelect/CampSelect";
-import SchoolSelect from "../components/SchoolSelect/SchoolSelect";
+import CountrySelect from "@components/CountrySelect/CountrySelect";
+import CampSelect from "@components/CampSelect/CampSelect";
+import SchoolSelect from "@components/SchoolSelect/SchoolSelect";
+import { Link } from "react-router-dom";
 import {
   removeStringDuplicateUsingFilter,
   removeObjDuplicateUsingFilter,
@@ -13,7 +14,10 @@ import {
   getValuesCorrectlyFromURLForChart,
   colors,
   months,
-} from "../variables/general";
+} from "@variables/general";
+import { CountryContext } from "../contexts/CountryContext";
+import { CampContext } from "../contexts/CampContext";
+import { SchoolContext } from "../contexts/SchoolContext";
 
 interface IChartData {
   camp: string;
@@ -43,8 +47,10 @@ const Dashboard = () => {
   >([]);
 
   const [filteredInfo, setFilteredInfo] = useState<IChartData[]>([]);
-  let params = new URLSearchParams(window.location.search);
-  console.log(window.location.search, "search");
+  const { country } = useContext(CountryContext);
+  const { camp } = useContext(CampContext);
+  const { school } = useContext(SchoolContext);
+
   useEffect(() => {
     swal.showLoading();
     axios
@@ -58,30 +64,23 @@ const Dashboard = () => {
         });
         //save full array
         setInfo(removeObjDuplicateUsingFilter(dataarr));
-        if (window.location.href.search("countryvalue") === -1) {
-          window.history.pushState(
-            {},
-            "",
-            `http://localhost:3000?countryvalue=&campvalue=&schoolvalue=`
-          );
-        }
-
         setFilteredInfo(
           removeObjDuplicateUsingFilterByCountryAndSchool(
             getValuesCorrectlyFromURLForChart(
-              params.get("countryvalue") ?? "",
-              params.get("campvalue") ?? "",
-              params.get("schoolvalue") ?? "",
+              country ?? "",
+              camp ?? "",
+              school ?? "",
               dataarr
             ) ?? []
           )
         );
+
         setFilteredInfoScrollbar(
           removeObjDuplicateUsingFilterByCountryAndSchool(
             getValuesCorrectlyFromURLForChart(
-              params.get("countryvalue") ?? "",
-              params.get("campvalue") ?? "",
-              params.get("schoolvalue")?.replaceAll("_", " ") ?? "",
+              country ?? "",
+              camp ?? "",
+              school ?? "",
               dataarr
             ) ?? []
           )
@@ -111,6 +110,7 @@ const Dashboard = () => {
               label: `${camp}`,
             };
           });
+
         let newSchoolOptions: { value: string; label: string }[] =
           filteredSchoolArr?.map((school: string) => {
             return {
@@ -118,6 +118,7 @@ const Dashboard = () => {
               label: `${school}`,
             };
           });
+        newSchoolOptions.unshift({ value: "", label: "Show All" });
         setCountryOptions(newCountryOptions);
         setCampOptions(newCampOptions);
         setSchoolOptions(newSchoolOptions);
@@ -128,6 +129,7 @@ const Dashboard = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  console.log(country, camp, school);
   const handleChange = (id: string, status: string) => {
     let tempinfo = [...filteredInfo];
     let tempscrollbar = [...filteredInfoscrollbar];
@@ -283,14 +285,7 @@ const Dashboard = () => {
             </h1>
             <h1> lessons</h1>
             <p>
-              in{" "}
-              {params.get("schoolvalue")?.replaceAll("_", " ")
-                ? params.get("schoolvalue")?.replaceAll("_", " ")
-                : params.get("campvalue")
-                ? params.get("campvalue")
-                : params.get("countryvalue")
-                ? params.get("countryvalue")
-                : "Dataset"}
+              in {school ? school : camp ? camp : country ? country : "Dataset"}
             </p>
 
             {filteredInfoscrollbar?.map(
@@ -320,24 +315,16 @@ const Dashboard = () => {
                             handleChange(filtereditem.id, "false");
                           }}
                         ></span>
-                        <a
+                        <Link
                           style={{
                             color: `${filtereditem.color}`,
                             opacity: 0.5,
                           }}
-                          href={`http://localhost:3000/school/${
-                            filtereditem.id
-                          }?countryvalue=${params.get(
-                            "countryvalue"
-                          )}&campvalue=${params.get(
-                            "campvalue"
-                          )}&schoolvalue=${params
-                            .get("schoolvalue")
-                            ?.replaceAll(" ", "_")}`}
+                          to={`/school/${filtereditem.id}`}
                         >
                           <h1>{filtereditem.lessons}</h1> in{" "}
                           {filtereditem.school}
-                        </a>
+                        </Link>
                       </>
                     ) : (
                       <>
@@ -356,21 +343,13 @@ const Dashboard = () => {
                             handleChange(filtereditem.id, "true");
                           }}
                         ></span>
-                        <a
+                        <Link
                           style={{ color: `${filtereditem.color}` }}
-                          href={`http://localhost:3000/school/${
-                            filtereditem.id
-                          }?countryvalue=${params.get(
-                            "countryvalue"
-                          )}&campvalue=${params.get(
-                            "campvalue"
-                          )}&schoolvalue=${params
-                            .get("schoolvalue")
-                            ?.replaceAll(" ", "_")}`}
+                          to={`/school/${filtereditem.id}`}
                         >
                           <h1>{filtereditem.lessons}</h1> in{" "}
                           {filtereditem.school}
-                        </a>
+                        </Link>
                       </>
                     )}
                   </div>

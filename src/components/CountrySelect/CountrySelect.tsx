@@ -1,8 +1,12 @@
-import Select from "../Select/Select";
+import { useContext } from "react";
+import Select from "@components/Select/Select";
 import {
   removeDuplicateOptionsUsingFilter,
   removeObjDuplicateUsingFilterByCountryAndSchool,
-} from "../../variables/general";
+} from "@variables/general";
+import { CampContext } from "../../contexts/CampContext";
+import { CountryContext } from "../../contexts/CountryContext";
+import { SchoolContext } from "../../contexts/SchoolContext";
 interface IChartData {
   camp: string;
   country: string;
@@ -15,7 +19,9 @@ interface IChartData {
 }
 
 function CountrySelect(props: any) {
-  let params = new URLSearchParams(window.location.search);
+  const { country, setCountry } = useContext(CountryContext);
+  const { camp } = useContext(CampContext);
+  const { school } = useContext(SchoolContext);
 
   const handleCountrySelect = (selectedOption: {
     value: string;
@@ -24,15 +30,8 @@ function CountrySelect(props: any) {
     let temparrinfo: Array<IChartData> = [];
     let temparrOptions: Array<{ value: string; label: string }> = [];
     if (selectedOption) {
-      window.history.pushState(
-        {},
-        "",
-        `http://localhost:3000?countryvalue=${
-          selectedOption.label
-        }&campvalue=${params.get("campvalue")}&schoolvalue=${params.get(
-          "schoolvalue"
-        )}`
-      );
+      setCountry(selectedOption.label);
+      console.log("country", country);
 
       temparrOptions = removeDuplicateOptionsUsingFilter(
         removeObjDuplicateUsingFilterByCountryAndSchool(
@@ -51,13 +50,8 @@ function CountrySelect(props: any) {
         )
       );
     } else {
-      window.history.pushState(
-        {},
-        "",
-        `http://localhost:3000?countryvalue=&campvalue=${params.get(
-          "campvalue"
-        )}&schoolvalue=${params.get("schoolvalue")}`
-      );
+      setCountry("");
+      console.log("country", "");
 
       temparrOptions = removeDuplicateOptionsUsingFilter(
         removeObjDuplicateUsingFilterByCountryAndSchool(props.info).map(
@@ -68,35 +62,28 @@ function CountrySelect(props: any) {
       );
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(props.info);
     }
-    if (params.get("campvalue")) {
+    if (camp !== "") {
+      console.log("camp", typeof camp);
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         props.info.filter(
-          (filtereditem: IChartData) =>
-            filtereditem.camp === params.get("campvalue")
+          (filtereditem: IChartData) => filtereditem.camp === camp
         )
       );
     }
-    if (params.get("schoolvalue")) {
+    if (school !== "") {
+      console.log("school", school);
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
         props.info.filter(
-          (filtereditem: IChartData) =>
-            filtereditem.school ===
-            params.get("schoolvalue")?.replaceAll("_", " ")
+          (filtereditem: IChartData) => filtereditem.school === school
         )
       );
     }
-
+    console.log("array", temparrinfo);
     props.setFilteredInfo(temparrinfo);
     props.setCampOptions(temparrOptions);
     props.setFilteredInfoScrollbar(temparrinfo);
   };
-  console.log(
-    props.countryOptions.filter(
-      (op: { value: string; label: string }) =>
-        op.label === params.get("countryvalue")
-    ),
-    "countryvalue"
-  );
+
   return (
     <>
       <Select
@@ -111,13 +98,11 @@ function CountrySelect(props: any) {
           }),
         }}
         defaultValue={props.countryOptions?.filter(
-          (op: { value: string; label: string }) =>
-            op.value === params.get("countryvalue")
+          (op: { value: string; label: string }) => op.value === country
         )}
         options={props.countryOptions}
         value={props.countryOptions?.filter(
-          (op: { value: string; label: string }) =>
-            op.value === params.get("countryvalue")
+          (op: { value: string; label: string }) => op.value === country
         )}
       />
     </>
