@@ -1,9 +1,12 @@
 import { useContext } from "react";
 import Select from "@components/Select/Select";
-import { removeObjDuplicateUsingFilterByCountryAndSchool } from "@variables/general";
-import { CampContext } from "../../contexts/CampContext";
-import { CountryContext } from "../../contexts/CountryContext";
-import { SchoolContext } from "../../contexts/SchoolContext";
+import {
+  removeObjDuplicateUsingFilterByCountryAndSchool,
+  removeDuplicateOptionsUsingFilter,
+} from "@variables/general";
+import { CampContext } from "@context/CampContext";
+import { CountryContext } from "@context/CountryContext";
+import { SchoolContext } from "@context/SchoolContext";
 interface IChartData {
   camp: string;
   country: string;
@@ -24,18 +27,49 @@ function SchoolSelect(props: any) {
     label: string;
   }) => {
     let temparrinfo: Array<IChartData> = [];
+    let temparrOptions: Array<{ value: string; label: string }> = [];
     if (selectedOption) {
-      setSchool(selectedOption.label);
-
-      temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
-        props.info?.filter(
-          (filtereditem: IChartData) =>
-            filtereditem.school === selectedOption.label
+      setSchool(selectedOption.value);
+      if (selectedOption.value === "") {
+        console.log(selectedOption.value, "value");
+        temparrOptions = removeDuplicateOptionsUsingFilter(
+          removeObjDuplicateUsingFilterByCountryAndSchool(props.info).map(
+            (option: IChartData) => {
+              return { value: option.school, label: option.school };
+            }
+          )
+        );
+        temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
+          props.info
+        );
+      } else {
+        temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
+          props.info?.filter(
+            (filtereditem: IChartData) =>
+              filtereditem.school === selectedOption.value
+          )
+        );
+        temparrOptions = removeDuplicateOptionsUsingFilter(
+          removeObjDuplicateUsingFilterByCountryAndSchool(
+            props.info?.filter(
+              (filtereditem: IChartData) =>
+                filtereditem.school === selectedOption.value
+            )
+          ).map((option: IChartData) => {
+            return { value: option.school, label: option.school };
+          })
+        );
+      }
+    } else {
+      console.log("showAll");
+      setSchool("");
+      temparrOptions = removeDuplicateOptionsUsingFilter(
+        removeObjDuplicateUsingFilterByCountryAndSchool(props.info).map(
+          (option: IChartData) => {
+            return { value: option.school, label: option.school };
+          }
         )
       );
-    } else {
-      setSchool("");
-
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(props.info);
     }
     if (camp !== "") {
@@ -44,6 +78,15 @@ function SchoolSelect(props: any) {
           (filtereditem: IChartData) => filtereditem.camp === camp
         )
       );
+      temparrOptions = removeDuplicateOptionsUsingFilter(
+        removeObjDuplicateUsingFilterByCountryAndSchool(
+          temparrinfo?.filter(
+            (filtereditem: IChartData) => filtereditem.camp === camp
+          )
+        ).map((option: IChartData) => {
+          return { value: option.school, label: option.school };
+        })
+      );
     }
     if (country !== "") {
       temparrinfo = removeObjDuplicateUsingFilterByCountryAndSchool(
@@ -51,8 +94,18 @@ function SchoolSelect(props: any) {
           (filtereditem: IChartData) => filtereditem.country === country
         )
       );
+      temparrOptions = removeDuplicateOptionsUsingFilter(
+        removeObjDuplicateUsingFilterByCountryAndSchool(
+          temparrinfo?.filter(
+            (filtereditem: IChartData) => filtereditem.country === country
+          )
+        ).map((option: IChartData) => {
+          return { value: option.school, label: option.school };
+        })
+      );
     }
-
+    temparrOptions.unshift({ value: "", label: "Show All" });
+    props.setSchoolOptions(temparrOptions);
     props.setFilteredInfo(temparrinfo);
     props.setFilteredInfoScrollbar(temparrinfo);
   };

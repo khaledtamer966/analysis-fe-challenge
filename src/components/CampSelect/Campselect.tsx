@@ -4,9 +4,9 @@ import {
   removeDuplicateOptionsUsingFilter,
   removeObjDuplicateUsingFilterByCountryAndSchool,
 } from "@variables/general";
-import { CampContext } from "../../contexts/CampContext";
-import { CountryContext } from "../../contexts/CountryContext";
-import { SchoolContext } from "../../contexts/SchoolContext";
+import { CampContext } from "@context/CampContext";
+import { CountryContext } from "@context/CountryContext";
+import { SchoolContext } from "@context/SchoolContext";
 interface IChartData {
   camp: string;
   country: string;
@@ -81,8 +81,18 @@ function CampSelect(props: any) {
           (filtereditem: IChartData) => filtereditem.school === school
         )
       );
+      temparrOptions = removeDuplicateOptionsUsingFilter(
+        removeObjDuplicateUsingFilterByCountryAndSchool(
+          temparrinfo?.filter(
+            (filtereditem: IChartData) => filtereditem.school === school
+          )
+        ).map((option: IChartData) => {
+          return { value: option.school, label: option.school };
+        })
+      );
     }
-
+    temparrOptions.unshift({ value: "", label: "Show All" });
+    console.log("options", temparrOptions);
     props.setFilteredInfo(temparrinfo);
     props.setSchoolOptions(temparrOptions);
     props.setFilteredInfoScrollbar(temparrinfo);

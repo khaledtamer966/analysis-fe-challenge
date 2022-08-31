@@ -4,9 +4,9 @@ import {
   removeDuplicateOptionsUsingFilter,
   removeObjDuplicateUsingFilterByCountryAndSchool,
 } from "@variables/general";
-import { CampContext } from "../../contexts/CampContext";
-import { CountryContext } from "../../contexts/CountryContext";
-import { SchoolContext } from "../../contexts/SchoolContext";
+import { CampContext } from "@context/CampContext";
+import { CountryContext } from "@context/CountryContext";
+import { SchoolContext } from "@context/SchoolContext";
 interface IChartData {
   camp: string;
   country: string;

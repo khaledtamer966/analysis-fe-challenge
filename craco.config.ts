@@ -7,6 +7,7 @@ module.exports = {
       "@images": path.resolve(__dirname, "src/assets/"),
       "@variables": path.resolve(__dirname, "src/variables/"),
       "@views": path.resolve(__dirname, "src/views/"),
+      "@context": path.resolve(__dirname, "src/contexts/"),
     },
   },
 };

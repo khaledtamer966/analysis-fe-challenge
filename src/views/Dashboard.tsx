@@ -14,10 +14,12 @@ import {
   getValuesCorrectlyFromURLForChart,
   colors,
   months,
+  getValuesCorrectlyFromURLForCampOptions,
+  getValuesCorrectlyFromURLForSchoolOptions,
 } from "@variables/general";
-import { CountryContext } from "../contexts/CountryContext";
-import { CampContext } from "../contexts/CampContext";
-import { SchoolContext } from "../contexts/SchoolContext";
+import { CountryContext } from "@context/CountryContext";
+import { CampContext } from "@context/CampContext";
+import { SchoolContext } from "@context/SchoolContext";
 
 interface IChartData {
   camp: string;
@@ -90,12 +92,7 @@ const Dashboard = () => {
         let filteredCountryArr = removeStringDuplicateUsingFilter(
           dataarr.map((record: IChartData) => record.country)
         );
-        let filteredCampArr = removeStringDuplicateUsingFilter(
-          dataarr.map((record: IChartData) => record.camp)
-        );
-        let filteredSchoolArr = removeStringDuplicateUsingFilter(
-          dataarr.map((record: IChartData) => record.school)
-        );
+
         let newCountryOptions: { value: string; label: string }[] =
           filteredCountryArr?.map((country: string) => {
             return {
@@ -103,25 +100,24 @@ const Dashboard = () => {
               label: `${country}`,
             };
           });
-        let newCampOptions: { value: string; label: string }[] =
-          filteredCampArr?.map((camp: string) => {
-            return {
-              value: camp,
-              label: `${camp}`,
-            };
-          });
 
-        let newSchoolOptions: { value: string; label: string }[] =
-          filteredSchoolArr?.map((school: string) => {
-            return {
-              value: school,
-              label: `${school}`,
-            };
-          });
-        newSchoolOptions.unshift({ value: "", label: "Show All" });
         setCountryOptions(newCountryOptions);
-        setCampOptions(newCampOptions);
-        setSchoolOptions(newSchoolOptions);
+        setCampOptions(
+          getValuesCorrectlyFromURLForCampOptions(
+            country ?? "",
+            camp ?? "",
+            school ?? "",
+            dataarr
+          ) ?? []
+        );
+        setSchoolOptions(
+          getValuesCorrectlyFromURLForSchoolOptions(
+            country ?? "",
+            camp ?? "",
+            school ?? "",
+            dataarr
+          ) ?? []
+        );
         swal.close();
       })
       .catch((e) => {
@@ -238,10 +234,10 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="row my-2">
+        <div className="row   justify-content-center ">
           <span
-            className="col-md-9"
-            style={{ marginLeft: "5%", borderRight: "1px solid" }}
+            className="col-md-9 col-sm-12"
+            style={{ borderRight: "1px solid", marginRight: "1%" }}
           >
             <LineChart
               labels={months?.map((month: string) => month)}
@@ -267,14 +263,13 @@ const Dashboard = () => {
             />
           </span>
           <span
-            className="col-md-2"
             style={{
               backgroundColor: "light grey",
-              marginLeft: "2%",
-              maxHeight: "500px",
+              marginLeft: "1%",
+              maxHeight: "550px",
               overflowY: "scroll",
-              backgroundBlendMode: "color",
             }}
+            className="col-md-2 col-sm-12 "
           >
             <h1>
               {calculateSum(

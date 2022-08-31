@@ -20,7 +20,8 @@
       "@components/*": ["./src/components/*"],
       "@images/*": ["./src/assets/*"],
       "@views/*": ["./src/views/*"],
-      "@variables/*": ["./src/variables/*"]
+      "@variables/*": ["./src/variables/*"],
+      "@context/*": ["./src/contexts/*"]
     }
   },
   "include": ["src", "craco.config.ts"],

@@ -144,6 +144,80 @@ export const removeObjDuplicateUsingFilterByCountryAndSchool = (
   );
   return uniquearray;
 };
+export const getValuesCorrectlyFromURLForCampOptions = (
+  country: string,
+  camp: string,
+  school: string,
+  infoarray: Array<IChartData>
+) => {
+  let filteredarray = [...infoarray];
+  if (country) {
+    filteredarray = filteredarray.filter(
+      (filteredItem: IChartData) => filteredItem.country === country
+    );
+  }
+
+  if (school) {
+    filteredarray = filteredarray.filter(
+      (filteredItem: IChartData) =>
+        filteredItem.school === school.replaceAll("_", " ")
+    );
+  }
+  if (filteredarray.length === 0) {
+    filteredarray = [...infoarray];
+  }
+  let filteredCampArr = removeStringDuplicateUsingFilter(
+    filteredarray.map((record: IChartData) => record.camp)
+  );
+  let newCampOptions: { value: string; label: string }[] = filteredCampArr?.map(
+    (camp: string) => {
+      return {
+        value: camp,
+        label: `${camp}`,
+      };
+    }
+  );
+  return newCampOptions;
+};
+export const getValuesCorrectlyFromURLForSchoolOptions = (
+  country: string,
+  camp: string,
+  school: string,
+  infoarray: Array<IChartData>
+) => {
+  let filteredarray = [...infoarray];
+  if (country) {
+    filteredarray = filteredarray.filter(
+      (filteredItem: IChartData) => filteredItem.country === country
+    );
+  }
+  if (camp) {
+    filteredarray = filteredarray.filter(
+      (filteredItem: IChartData) => filteredItem.camp === camp
+    );
+  }
+  if (school) {
+    filteredarray = filteredarray.filter(
+      (filteredItem: IChartData) =>
+        filteredItem.school === school.replaceAll("_", " ")
+    );
+  }
+  if (filteredarray.length === 0) {
+    filteredarray = [...infoarray];
+  }
+  let filteredSchoolArr = removeStringDuplicateUsingFilter(
+    filteredarray.map((record: IChartData) => record.school)
+  );
+  let newSchoolOptions: { value: string; label: string }[] =
+    filteredSchoolArr?.map((school: string) => {
+      return {
+        value: school,
+        label: `${school}`,
+      };
+    });
+  newSchoolOptions.unshift({ value: "", label: "Show All" });
+  return newSchoolOptions;
+};
 export const getValuesCorrectlyFromURLForChart = (
   country: string,
   camp: string,
