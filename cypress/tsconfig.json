@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "node"]
+  },
+  "resolve": {
+    "extensions": [".js", ".jsx", ".ts", ".tsx"]
+  },
+  "include": [
+    "**/*.ts",
+    "./cypress.d.ts",
+    "./src",
+    "./craco.config.ts",
+    "component/CountrySelect.cy.tsx"
+  ],
+  "experimentalComponentTesting": true,
+  "componentFolder": "src",
+  "types": ["cypress"],
+  "jsx": "react",
+  "paths": {
+    "@components/*": ["./src/components/*"],
+    "@images/*": ["./src/assets/*"],
+    "@views/*": ["./src/views/*"],
+    "@variables/*": ["./src/variables/*"],
+    "@context/*": ["./src/contexts/*"]
+  }
+}

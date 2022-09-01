@@ -5,8 +5,8 @@
   "dependencies": {
     "@craco/craco": "6.4.5",
     "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/bluebird": "^3.5.36",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.45",
     "@types/react": "^18.0.15",
@@ -14,6 +14,7 @@
     "axios": "^0.27.2",
     "chart.js": "^3.8.2",
     "eslint-config-react-app": "^7.0.1",
+    "jest": "^27.5.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
@@ -29,13 +30,21 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "jest  --watchAll  --config=jest.config.ts",
     "eject": "craco eject"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "<rootDir>/jest.config.ts",
+      "<rootDir>/craco.config.ts",
+      "<rootDir>/webpack.config.ts"
+    ]
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:cypress/recommended"
     ]
   },
   "browserslist": {
@@ -51,13 +60,22 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.18.13",
+    "@babel/preset-env": "^7.18.10",
+    "@cypress/webpack-preprocessor": "^5.12.2",
+    "@testing-library/react": "^13.3.0",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
-    "cypress": "^10.3.1",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.5",
+    "babel-plugin-styled-components": "^2.0.7",
+    "cypress": "^10.7.0",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "webpack": "^5.74.0"
   }
 }
